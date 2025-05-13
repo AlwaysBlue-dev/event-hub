@@ -20,7 +20,7 @@ DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 if os.environ.get('RENDER'):
-    ALLOWED_HOSTS.append('your-app-name.onrender.com')
+    ALLOWED_HOSTS.append('https://eventshub-mo8n.onrender.com')
 
     
 # Application definition
@@ -43,6 +43,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'EventsHub.urls'
@@ -134,4 +135,4 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
 
-SITE_URL = 'http://127.0.0.1:8000'  # Local development URL
+SITE_URL = config('SITE_URL')  # Local development URL
