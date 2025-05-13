@@ -1,0 +1,36 @@
+# Dockerfile
+
+# Use official Python base image
+FROM python:3.11-slim
+
+# Install required system packages, including zbar
+RUN apt-get update && apt-get install -y \
+    libzbar0 \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set work directory
+WORKDIR /app
+
+# Copy requirements first and install Python dependencies
+COPY requirements.txt .
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+# Copy the whole project
+COPY . .
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+
+
+# Superuser creation script using environment variables
+COPY create_superuser.py /MainApp/create_superuser.py
+
+# Run Django commands: collect static, migrate, create superuser, start server
+CMD bash -c "
+    python manage.py collectstatic --noinput && \
+    python manage.py migrate && \
+    python create_superuser.py && \
+    gunicorn EventsHub.wsgi:application --bind 0.0.0.0:8000
+"

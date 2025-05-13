@@ -1,0 +1,26 @@
+# render.yaml
+
+services:
+  - type: web
+    name: EventsHub
+    plan: free
+    dockerfilePath: ./DockerFile  # Docker deployment, so no need for runtime or env
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: events-db
+          property: connectionString
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: admin
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: admin@example.com
+      - key: DJANGO_SUPERUSER_PASSWORD
+        value: adminpass123
+
+databases:
+  - name: events-db
+    plan: free
