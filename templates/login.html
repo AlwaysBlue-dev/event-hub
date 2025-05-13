@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - EventHub{% endblock %}
+
+{% block extra_link %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+   
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-wrapper d-flex flex-column flex-md-row">
+        <!-- Left Side - Illustration -->
+        <div class="login-illustration glass-panel" data-aos="fade-left">
+            <img src="{% static 'images/login-illustration.svg' %}" alt="Login Illustration" class="illustration-img">
+            <div class="illustration-text">
+                <h2 class="neon-heading neon-glitch" data-text="Welcome Back!">Welcome Back!</h2>
+                <p>Discover amazing events and connect with like-minded people.</p>
+            </div>
+        </div>
+
+        <!-- Right Side - Login Form -->
+        <div class="login-form-container glass-panel" data-aos="fade-right" data-aos-delay="200">
+            <div class="login-form-wrapper">
+                <div class="form-header">
+                    <img src="{% static 'images/logo.svg' %}" alt="EventHub Logo" class="logo neon-logo">
+                    <h1 class="neon-heading neon-glitch" data-text="Sign In">Sign In</h1>
+                    <p>Enter your credentials to access your account</p>
+                </div>
+
+                <form method="post" action="{% url 'login' %}" class="login-form">
+                    {% csrf_token %}
+                    {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert neon-alert alert-{{ message.tags }}" data-aos="fade-down">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-icon neon-icon">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <input type="email" name="email" id="email" class="form-control neon-input" placeholder="your@email.com" required>
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group password-group">
+                            <span class="input-icon neon-icon">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <input type="password" name="password" id="password" class="form-control neon-input" placeholder="••••••••" required>
+                            <button type="button" class="password-toggle neon-toggle" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="form-footer d-flex justify-content-between align-items-center">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input neon-check" id="rememberMe">
+                                <label class="form-check-label" for="rememberMe">Remember me</label>
+                            </div>
+                            <a href="" class="forgot-password neon-link">Forgot password?</a>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn neon-button w-100">
+                        <i class="fas fa-sign-in-alt me-2"></i> Sign In
+                    </button>
+
+                    <!-- Social Login -->
+                    <div class="social-login">
+                        <p class="divider">or continue with</p>
+                        <div class="social-buttons d-flex justify-content-center gap-3">
+                            <a href="#" class="social-btn neon-social google">
+                                <img src="{% static 'images/google-icon.svg' %}" alt="Google">
+                            </a>
+                            <a href="#" class="social-btn neon-social facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="social-btn neon-social twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Register Link -->
+                    <div class="register-link text-center">
+                        Don't have an account? <a href="{% url 'register' %}" class="neon-link">Create one</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle password visibility
+    const togglePassword = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+    
+    togglePassword.addEventListener('click', function() {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,426 @@
+/* CSS specific to the Event Sales Detail Dashboard page */
+:root {
+    --primary-color: #ff2e63; /* Neon Pink */
+    --secondary-color: #00ffcc; /* Neon Cyan */
+    --dark-color: #1a1a2e; /* Dark Navy */
+    --text-color: #b0b0cc; /* Light Gray */
+    --white: #ffffff;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    --transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --neon-glow: 0 0 10px #ff2e63, 0 0 20px #ff2e63, 0 0 30px #ff2e63;
+  }
+  
+  /* Scoped to .event-sales-detail-container */
+  .event-sales-detail-container {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color);
+    position: relative;
+  }
+  
+  .event-sales-detail-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://grainy-gradients.vercel.app/noise.svg');
+    opacity: 0.05;
+    pointer-events: none;
+  }
+  
+  /* Sidebar */
+  .event-sales-detail-container .neon-sidebar {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 2rem;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    box-shadow: var(--shadow);
+  }
+  
+  /* Dashboard Header */
+  .event-sales-detail-container .dashboard-header {
+    margin-bottom: 2rem;
+  }
+  
+  .event-sales-detail-container .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .event-sales-detail-container h1.neon-glitch {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    color: var(--white);
+    text-shadow: var(--neon-glow);
+  }
+  
+  .event-sales-detail-container .neon-badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    background: linear-gradient(45deg, Pescado con cabeza y cola
+  #ff2e63, #00ffcc);
+    animation: badgePulse 2s infinite;
+  }
+  
+  @keyframes badgePulse {
+    0% { box-shadow: 0 0 5px var(--secondary-color); }
+    50% { box-shadow: 0 0 15px var(--secondary-color); }
+    100% { box-shadow: 0 0 5px var(--secondary-color); }
+  }
+  
+  .event-sales-detail-container .event-meta {
+    display: flex;
+    gap: 2rem;
+    font-size: 0.9rem;
+    color: var(--text-color);
+  }
+  
+  .event-sales-detail-container .event-meta span i {
+    color: var(--secondary-color);
+  }
+  
+  /* Metric Cards */
+  .event-sales-detail-container .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .event-sales-detail-container .metric-card.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: var(--transition);
+  }
+  
+  .event-sales-detail-container .metric-card.glass-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 20px var(--secondary-color);
+  }
+  
+  .event-sales-detail-container .metric-icon {
+    font-size: 2rem;
+    color: var(--secondary-color);
+  }
+  
+  .event-sales-detail-container .metric-content h5 {
+    font-size: 1rem;
+    color: var(--text-color);
+    text-transform: uppercase;
+  }
+  
+  .event-sales-detail-container .metric-content h2.neon-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    color: var(--secondary-color);
+    text-shadow: 0 0 5px var(--secondary-color);
+  }
+  
+  .event-sales-detail-container .metric-trend {
+    font-size: 0.8rem;
+  }
+  
+  .event-sales-detail-container .metric-trend.up i {
+    color: #00cc99;
+  }
+  
+  .event-sales-detail-container .metric-trend.down i {
+    color: #ff3366;
+  }
+  
+  /* Chart Card */
+  .event-sales-detail-container .ticket-distribution-card.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    margin-bottom: 2rem;
+  }
+  
+  .event-sales-detail-container .ticket-distribution-card .card-header {
+    background: transparent;
+    border-bottom: 2px solid var(--secondary-color);
+  }
+  
+  .event-sales-detail-container .neon-subtitle {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--white);
+    font-size: 1.8rem;
+    text-shadow: 0 0 5px var(--secondary-color);
+  }
+  
+  /* Sales Breakdown Card */
+  .event-sales-detail-container .sales-breakdown-card.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    margin-bottom: 2rem;
+  }
+  
+  .event-sales-detail-container .sales-breakdown-card .card-header {
+    background: transparent;
+    border-bottom: 2px solid var(--secondary-color);
+  }
+  
+  .event-sales-detail-container .search-box .input-group {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    width: 250px;
+  }
+  
+  .event-sales-detail-container .search-box .form-control.neon-input {
+    background: transparent;
+    border: none;
+    color: var(--white);
+  }
+  
+  .event-sales-detail-container .search-box .form-control.neon-input:focus {
+    box-shadow: none;
+    color: var(--white);
+  }
+  
+  .event-sales-detail-container .search-box .input-group-text {
+    background: transparent;
+    border: none;
+    color: var(--secondary-color);
+  }
+  
+  .event-sales-detail-container .search-box .clear-search {
+    cursor: pointer;
+  }
+  
+  .event-sales-detail-container select.neon-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--white);
+    border-radius: 8px;
+    padding: 0.5rem;
+    width: 200px;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%2300ffcc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.5rem;
+  }
+  
+  .event-sales-detail-container select.neon-input option {
+    background: var(--dark-color);
+    color: var(--white);
+  }
+  
+  .event-sales-detail-container select.neon-input:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 10px var(--secondary-color);
+  }
+  
+  .event-sales-detail-container .table-dark {
+    background: transparent;
+  }
+  
+  .event-sales-detail-container .table-dark th {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--white);
+    border-bottom: 2px solid var(--secondary-color);
+  }
+  
+  .event-sales-detail-container .table-dark td {
+    color: var(--text-color);
+    vertical-align: middle;
+  }
+  
+  .event-sales-detail-container .table-dark tr:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .event-sales-detail-container .table-dark .sold-out {
+    background: rgba(255, 0, 0, 0.2);
+  }
+  
+  .event-sales-detail-container .ticket-type-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .event-sales-detail-container .ticket-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .event-sales-detail-container .table-light {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  /* Top Tickets Card */
+  .event-sales-detail-container .top-tickets-card.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+  }
+  
+  .event-sales-detail-container .top-ticket-item.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+    transition: var(--transition);
+    /* transform: rotate({% cycle '-2deg' '2deg' '0deg' '-1deg' %}); */
+  }
+  
+  .event-sales-detail-container .top-ticket-item.glass-card:hover {
+    transform: rotate(0deg) scale(1.05);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 20px var(--secondary-color);
+  }
+  
+  .event-sales-detail-container .rank-badge.neon-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 0.8rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #ff2e63, #00ffcc);
+  }
+  
+  .event-sales-detail-container .ticket-content h5 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--white);
+    font-size: 1.2rem;
+  }
+  
+  .event-sales-detail-container .ticket-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .event-sales-detail-container .stat-item {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .event-sales-detail-container .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-color);
+  }
+  
+  .event-sales-detail-container .stat-value.neon-text {
+    font-size: 1rem;
+    color: var(--secondary-color);
+    text-shadow: 0 0 5px var(--secondary-color);
+  }
+  
+  .event-sales-detail-container .progress {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+  
+  .event-sales-detail-container .progress-bar.neon-progress {
+    animation: progressPulse 2s infinite;
+  }
+  
+  @keyframes progressPulse {
+    0% { box-shadow: 0 0 5px var(--secondary-color); }
+    50% { box-shadow: 0 0 15px var(--secondary-color); }
+    100% { box-shadow: 0 0 5px var(--secondary-color); }
+  }
+  
+  .event-sales-detail-container .empty-state.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+  }
+  
+  .event-sales-detail-container .empty-state i {
+    font-size: 2rem;
+    color: var(--secondary-color);
+  }
+  
+  /* Buttons */
+  .event-sales-detail-container .neon-button {
+    background: linear-gradient(45deg, #ff2e63, #00ffcc);
+    color: var(--white);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    box-shadow: var(--neon-glow);
+    transition: var(--transition);
+  }
+  
+  .event-sales-detail-container .neon-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .event-sales-detail-container .neon-sidebar {
+      position: static;
+      height: auto;
+      margin-bottom: 2rem;
+    }
+    .event-sales-detail-container h1.neon-glitch {
+      font-size: 2rem;
+    }
+    .event-sales-detail-container .event-meta {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .event-sales-detail-container .metrics-grid {
+      grid-template-columns: 1fr;
+    }
+    .event-sales-detail-container .metric-content h2.neon-text {
+      font-size: 2rem;
+    }
+    .event-sales-detail-container .search-box .input-group {
+      width: 100%;
+    }
+    .event-sales-detail-container select.neon-input {
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .event-sales-detail-container h1.neon-glitch {
+      font-size: 1.8rem;
+    }
+    .event-sales-detail-container .top-ticket-item.glass-card {
+      transform: rotate(0deg);
+    }
+    .event-sales-detail-container .ticket-content h5 {
+      font-size: 1rem;
+    }
+    .event-sales-detail-container .table-responsive {
+      font-size: 0.8rem;
+    }
+  }

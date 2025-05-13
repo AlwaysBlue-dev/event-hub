@@ -1,0 +1,290 @@
+/* CSS specific to the Event Detail page */
+:root {
+  --primary-color: #ff2e63; /* Neon Pink */
+  --secondary-color: #00ffcc; /* Neon Cyan */
+  --dark-color: #1a1a2e; /* Dark Navy */
+  --text-color: #b0b0cc; /* Light Gray */
+  --white: #ffffff;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --neon-glow: 0 0 10px #ff2e63, 0 0 20px #ff2e63, 0 0 30px #ff2e63;
+}
+
+/* Scoped to .event-detail */
+.event-detail {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.event-detail .hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://grainy-gradients.vercel.app/noise.svg');
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+.event-detail .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Event Header */
+.event-detail .event-header {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
+  transform: rotate(-2deg);
+  transition: var(--transition);
+}
+
+.event-detail .event-header:hover {
+  transform: rotate(0deg);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.event-detail .event-title.neon-glitch {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--white);
+  text-shadow: var(--neon-glow);
+  margin-bottom: 1.5rem;
+}
+
+.event-detail .event-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.event-detail .event-meta span {
+  color: var(--white);
+  text-shadow: 0 0 5px #00ffcc;
+}
+
+.event-detail .neon-link {
+  color: var(--secondary-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.event-detail .neon-link:hover {
+  color: var(--white);
+  text-shadow: 0 0 10px #ff2e63;
+}
+
+/* Carousel */
+.event-detail .neon-carousel {
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow);
+}
+
+.event-detail .carousel-inner {
+  transform: perspective(1000px);
+}
+
+.event-detail .carousel-item {
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.event-detail .carousel-item img {
+  height: 400px;
+  object-fit: cover;
+  filter: saturate(1.2);
+  border-radius: 16px;
+}
+
+.event-detail .carousel-control-prev,
+.event-detail .carousel-control-next {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  width: 60px;
+  border-radius: 50%;
+  margin: 1rem;
+  transition: var(--transition);
+}
+
+.event-detail .neon-control:hover {
+  background: linear-gradient(45deg, #ff2e63, #00ffcc);
+  box-shadow: var(--neon-glow);
+}
+
+.event-detail .carousel-control-prev-icon,
+.event-detail .carousel-control-next-icon {
+  filter: drop-shadow(0 0 5px #00ffcc);
+}
+
+/* Event Content */
+.event-detail .event-content {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.event-detail .section-title.neon-subtitle {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  color: var(--secondary-color);
+  text-shadow: 0 0 5px #00ffcc;
+  margin-bottom: 1rem;
+}
+
+.event-detail .event-description {
+  font-size: 1.1rem;
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+}
+
+.event-detail .event-info p {
+  font-size: 1rem;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.event-detail .user-profile-image.neon-face {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--secondary-color);
+  box-shadow: 0 0 8px #00ffcc;
+  vertical-align: middle;
+  margin-left: 0.5rem;
+}
+
+/* Sidebar Panel */
+.event-detail .sidebar-panel {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 100px;
+  transform: rotate(2deg);
+  transition: var(--transition);
+}
+
+.event-detail .sidebar-panel:hover {
+  transform: rotate(0deg);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.event-detail .panel-title.neon-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  color: var(--white);
+  text-shadow: var(--neon-glow);
+  margin-bottom: 1.5rem;
+}
+
+.event-detail .panel-title.text-muted {
+  color: var(--text-color);
+  text-shadow: none;
+}
+
+.event-detail .ticket-info p {
+  font-size: 1rem;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.event-detail .ticket-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+
+.event-detail .ticket-list li {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.event-detail .neon-button {
+  background: linear-gradient(45deg, #ff2e63, #00ffcc);
+  color: var(--white);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  padding: 1rem;
+  border-radius: 8px;
+  border: none;
+  box-shadow: var(--neon-glow);
+  transition: var(--transition);
+  pointer-events: auto;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: block;
+}
+
+.event-detail .neon-button.pulse {
+  animation: buttonPulse 1.5s infinite;
+}
+
+@keyframes buttonPulse {
+  0% { transform: scale(1); box-shadow: var(--neon-glow); }
+  50% { transform: scale(1.05); box-shadow: 0 0 20px #ff2e63, 0 0 30px #00ffcc; }
+  100% { transform: scale(1); box-shadow: var(--neon-glow); }
+}
+
+.event-detail .neon-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .event-detail .event-title.neon-glitch {
+    font-size: 2.5rem;
+  }
+  .event-detail .sidebar-panel {
+    position: static;
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .event-detail {
+    padding: 4rem 0;
+  }
+  .event-detail .event-header {
+    padding: 1.5rem;
+  }
+  .event-detail .carousel-item img {
+    height: 300px;
+  }
+}
+
+@media (max-width: 576px) {
+  .event-detail .event-title.neon-glitch {
+    font-size: 2rem;
+  }
+  .event-detail .event-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .event-detail .carousel-item img {
+    height: 200px;
+  }
+}

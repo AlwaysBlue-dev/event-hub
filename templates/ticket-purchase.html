@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Ticket Purchase - Event Management Software{% endblock %}
+    
+{% block extra_link %}
+    <link rel="stylesheet" href="{% static 'css/ticket-purchase.css' %}">
+{% endblock %}
+
+{% block content %}     
+ <!-- Ticket Purchase -->
+ <section class="ticket-purchase">
+    <div class="container">
+        <h2>Ticket Purchase</h2>
+        <form>
+            <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="name">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="email">
+            </div>
+            <div class="mb-3">
+                <label for="ticket-type" class="form-label">Ticket Type</label>
+                <input type="text" class="form-control" id="ticket-type" value="General Admission - PKR 300" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity</label>
+                <input type="number" class="form-control" id="quantity" value="1" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="total" class="form-label">Total</label>
+                <input type="text" class="form-control" id="total" value="PKR 300" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="payment" class="form-label">Payment Method</label>
+                <select class="form-select" id="payment">
+                    <option>JazzCash</option>
+                    <option>EasyPaisa</option>
+                    <option>Bank Transfer</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Proceed to Payment</button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

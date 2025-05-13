@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Validate QR Code - EventManager{% endblock %}
+
+{% block extra_link %}
+    <link rel="stylesheet" href="{% static 'css/validate-qr.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+   
+{% endblock %}
+
+{% block content %}
+<section class="qr-container">
+    <div class="container text-center">
+        <h2 class="neon-heading neon-glitch" data-text="Validate QR Code" data-aos="zoom-in">Validate QR Code</h2>
+
+        <!-- Buttons -->
+        <div class="row justify-content-center mb-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-md-6 d-flex justify-content-center gap-3">
+                <button onclick="showUpload()" class="neon-button">
+                    <i class="fas fa-upload me-2"></i>Upload QR Code
+                </button>
+                <button onclick="showScan()" class="neon-button neon-success">
+                    <i class="fas fa-camera me-2"></i>Scan QR Code
+                </button>
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <div id="upload-section" class="qr-upload glass-panel" data-aos="fade-up" data-aos-delay="200">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="qr_image" class="form-label">Upload QR Code Image</label>
+                <div class="input-group mb-3">
+                    <span class="input-icon neon-icon">
+                        <i class="fas fa-image"></i>
+                    </span>
+                    <input type="file" name="qr_image" id="qr_image" accept="image/*" required class="form-control neon-input">
+                </div>
+                <button type="submit" class="neon-button w-100">Validate</button>
+            </form>
+        </div>
+
+        <!-- Scan Section -->
+        <div id="scan-section" class="qr-scan hidden glass-panel" data-aos="fade-up" data-aos-delay="300">
+            <div id="reader" class="qr-reader"></div>
+            <div class="qr-box"></div>
+            <div id="status" class="status-text"><em>Initializing camera...</em></div>
+        </div>
+    </div>
+</section>
+
+<!-- HTML5 QR Code Scanner Library -->
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+<script>
+function showUpload() {
+    document.getElementById('upload-section').classList.remove('hidden');
+    document.getElementById('scan-section').classList.add('hidden');
+}
+
+function showScan() {
+    document.getElementById('upload-section').classList.add('hidden');
+    document.getElementById('scan-section').classList.remove('hidden');
+    startScanner();
+}
+
+function startScanner() {
+    const qrRegion = document.getElementById("reader");
+    if (window.html5QrCodeScanner) return;
+
+    window.html5QrCodeScanner = new Html5Qrcode("reader");
+
+    window.html5QrCodeScanner.start(
+        { facingMode: "environment" },
+        {
+            fps: 10,
+            qrbox: 300
+        },
+        qrCodeMessage => {
+            document.getElementById("status").innerHTML = `<strong class="neon-success-text">QR Code Scanned!</strong>`;
+            window.html5QrCodeScanner.stop().then(() => {
+                fetch("{% url 'validate-qr' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: JSON.stringify({ qr_code: qrCodeMessage })
+                })
+                .then(res => res.text())
+                .then(html => {
+                    document.open();
+                    document.write(html);
+                    document.close();
+                });
+            });
+        },
+        errorMessage => {
+            document.getElementById("status").innerHTML = `<em>Scanning... (${errorMessage})</em>`;
+        }
+    ).catch(err => {
+        document.getElementById("status").innerHTML = `<strong class="neon-error-text">Camera failed: ${err}</strong>`;
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const glitchElements = document.querySelectorAll('.qr-container .neon-glitch');
+    glitchElements.forEach(el => {
+        setInterval(() => {
+            el.style.textShadow = `2px 2px 5px #ff2e63, -2px -2px 5px #00ffcc`;
+            el.style.transform = `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`;
+            setTimeout(() => {
+                el.style.textShadow = `0 0 10px #ff2e63, 0 0 20px #00ffcc`;
+                el.style.transform = 'translate(0, 0)';
+            }, 150);
+        }, Math.random() * 2000 + 2000);
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% block extra_link %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+
+<!-- Sidebar (Desktop) -->
+<nav class="col-md-3 col-lg-2 d-md-block neon-sidebar">
+  <div class="position-sticky pt-3">
+    <ul class="nav flex-column">
+      <li class="nav-item" data-aos="fade-right" data-aos-delay="100">
+        <a class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}" href="{% url 'dashboard' %}">
+          <i class="fas fa-calendar-alt me-2"></i>My Events
+        </a>
+      </li>
+      <li class="nav-item" data-aos="fade-right" data-aos-delay="200">
+        <a class="nav-link {% if request.path == '/my-tickets/' %}active{% endif %}" href="{% url 'my_tickets' %}">
+          <i class="fas fa-ticket-alt me-2"></i>My Tickets
+        </a>
+      </li>
+      <li class="nav-item" data-aos="fade-right" data-aos-delay="300">
+        <a class="nav-link {% if request.path == '/event/create/' %}active{% endif %}" href="{% url 'create_event' %}">
+          <i class="fas fa-plus me-2"></i>Create Event
+        </a>
+      </li>
+      <li class="nav-item" data-aos="fade-right" data-aos-delay="400">
+        <a class="nav-link {% if request.path == '/event_sales/' %}active{% endif %}" href="{% url 'event-sales' %}">
+          <i class="fas fa-chart-line me-2"></i>All Event Sales
+        </a>
+      </li>
+      <li class="nav-item" data-aos="fade-right" data-aos-delay="500">
+        <a class="nav-link {% if request.path == '/attendees/' %}active{% endif %}" href="{% url 'event-attendees' %}">
+          <i class="fas fa-users me-2"></i>Attendees
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Mobile Bottom Tab Navigation -->
+<nav class="mobile-tabbar d-md-none">
+  <a href="{% url 'dashboard' %}" class="tab-link {% if request.path == '/dashboard/' %}active{% endif %}">
+    <i class="fas fa-calendar-alt"></i><span>Events</span>
+  </a>
+  <a href="{% url 'my_tickets' %}" class="tab-link {% if request.path == '/my-tickets/' %}active{% endif %}">
+    <i class="fas fa-ticket-alt"></i><span>Tickets</span>
+  </a>
+  <a href="{% url 'create_event' %}" class="tab-link {% if request.path == '/event/create/' %}active{% endif %}">
+    <i class="fas fa-plus"></i><span>Create</span>
+  </a>
+  <a href="{% url 'event-sales' %}" class="tab-link {% if request.path == '/event_sales/' %}active{% endif %}">
+    <i class="fas fa-chart-line"></i><span>Sales</span>
+  </a>
+  <a href="{% url 'event-attendees' %}" class="tab-link {% if request.path == '/attendees/' %}active{% endif %}">
+    <i class="fas fa-users"></i><span>Attendees</span>
+  </a>
+</nav>

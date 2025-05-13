@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block title %}Edit Event - EventManager{% endblock %}
+
+{% block extra_link %}
+    <link rel="stylesheet" href="{% static 'css/edit-event.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<section class="event-edit-container">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        {% include 'partials/sidebar.html' %}
+<main class="col-md-10 ms-sm-auto col-lg-10 px-md-4 mt-3">
+    <div class="">
+        <h1 class="neon-heading neon-glitch" data-text="Edit Event" data-aos="zoom-in">
+            <i class="fas fa-edit me-2"></i>Edit Event
+        </h1>
+
+        <form method="POST" enctype="multipart/form-data" class="neon-form" data-aos="fade-up" data-aos-delay="100">
+            {% csrf_token %}
+
+            <!-- Event Info -->
+            <div class="neon-card glass-panel" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <label class="neon-label"><i class="fas fa-tag me-2"></i>Event Name <span class="neon-required">*</span></label>
+                        <input type="text" name="name" value="{{ event.name }}" class="neon-input w-full" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="neon-label"><i class="fas fa-align-left me-2"></i>Description <span class="neon-required">*</span></label>
+                        <textarea name="description" class="neon-input w-full" rows="4" maxlength="500" required>{{ event.description }}</textarea>
+                        <p class="neon-counter text-right text-sm mt-1"><span id="desc-count">{{ event.description|length }}</span>/500 characters</p>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="neon-label"><i class="fas fa-calendar me-2"></i>Date <span class="neon-required">*</span></label>
+                            <input type="date" name="date" value="{{ event.date|date:'Y-m-d' }}" class="neon-input w-full" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="neon-label"><i class="fas fa-clock me-2"></i>Time <span class="neon-required">*</span></label>
+                            <input type="time" name="time" value="{{ event.time|time:'H:i' }}" class="neon-input w-full" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="neon-label"><i class="fas fa-map-marker-alt me-2"></i>Location <span class="neon-required">*</span></label>
+                        <input type="text" name="location" value="{{ event.location }}" class="neon-input w-full" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="neon-label"><i class="fas fa-link me-2"></i>Google Map Link <span class="neon-required">*</span></label>
+                        <input type="url" name="map_link" value="{{ event.map_link }}" class="neon-input w-full" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Image -->
+            <div class="neon-card glass-panel" data-aos="fade-up" data-aos-delay="300">
+                <div class="card-body">
+                    <label class="neon-label"><i class="fas fa-image me-2"></i>Main Event Image</label>
+                    {% if event.image %}
+                        <div class="image-preview mb-2">
+                            <img src="{{ event.image.url }}" alt="Main Image" class="neon-image">
+                        </div>
+                    {% endif %}
+                    <div class="input-group">
+                        <span class=""><i class="fas fa-upload"></i></span>
+                        <input type="file" name="image" accept="image/jpeg,image/png" class="neon-input w-full">
+                    </div>
+                    <p class="neon-note text-sm mt-1">Allowed formats: JPG, JPEG, PNG</p>
+                </div>
+            </div>
+
+            <!-- Guest Faces -->
+            <div class="neon-card glass-panel" data-aos="fade-up" data-aos-delay="400">
+                <div class="card-body">
+                    <label class="neon-label"><i class="fas fa-user me-2"></i>Guest Faces</label>
+                    <div class="row mb-4">
+                        {% for face in event.faces.all %}
+                            <div class="col-md-3 col-6 mb-3 text-center">
+                                <div class="image-preview">
+                                    <img src="{{ face.image.url }}" class="neon-image rounded-circle">
+                                </div>
+                                <label class="neon-checkbox">
+                                    <input type="checkbox" name="delete_face_{{ face.id }}">
+                                    Delete
+                                </label>
+                            </div>
+                        {% empty %}
+                            <p class="text-center text-gray-400">No guest faces added.</p>
+                        {% endfor %}
+                    </div>
+                    <div id="guest-faces-container" class="mb-4">
+                        {% for i in "123" %}
+                            {% if event.faces.count < 3 %}
+                                <div class="input-group mb-3">
+                                    <span class=""><i class="fas fa-upload"></i></span>
+                                    <input type="file" name="new_faces_{{ i }}" accept="image/jpeg,image/png" class="neon-input w-full"
+                                    {% if event.faces.count >= 3 %} disabled {% endif %}>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <p class="neon-note text-sm mt-1">Allowed formats: JPG, JPEG, PNG</p>
+                </div>
+            </div>
+
+            <!-- Highlights -->
+            <div class="neon-card glass-panel" data-aos="fade-up" data-aos-delay="500">
+                <div class="card-body">
+                    <label class="neon-label mb-3"><i class="fas fa-star me-2"></i>Event Highlights</label>
+                    <div class="mb-4">
+                        {% for highlight in event.highlights.all %}
+                            <div class="input-group mb-2">
+                                <span class=""><i class=""></i></span>
+                                <input type="text" name="highlight_{{ highlight.id }}" value="{{ highlight.text }}" class="neon-input w-full"
+                                {% if event.highlights.count >= 3 %} disabled {% endif %}>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div id="new-highlights" class="mb-4"></div>
+                    <button type="button" onclick="addHighlight()" class="neon-button neon-add" 
+                    {% if event.highlights.count >= 3 %} disabled {% endif %}>
+                        <i class="fas fa-plus me-2"></i>Add Highlight
+                    </button>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center" data-aos="fade-up" data-aos-delay="700">
+                <button type="submit" class="neon-button neon-submit">
+                    <i class="fas fa-save me-2"></i>Update Event
+                </button>
+            </div>
+        </form>
+    </div>
+    
+</section>
+
+<script>
+    let highlightIndex = {{ event.highlights.count }};
+function addHighlight() {
+    if (highlightIndex < 3) {
+        const container = document.getElementById('new-highlights');
+        const div = document.createElement('div');
+        div.className = 'input-group mb-2';
+        div.innerHTML = `
+            <span class=""><i class=""></i></span>
+            <input type="text" name="new_highlight_${highlightIndex}" placeholder="New Highlight" class="neon-input w-full">
+        `;
+        container.appendChild(div);
+        highlightIndex++;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Character counter for description
+    const descInput = document.querySelector('textarea[name="description"]');
+    const descCount = document.getElementById('desc-count');
+    descInput.addEventListener('input', function() {
+        descCount.textContent = descInput.value.length;
+    });
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const descInput = document.querySelector('textarea[name="description"]');
+    const descCount = document.getElementById('desc-count');
+    const guestFacesContainer = document.getElementById('guest-faces-container');
+
+    descInput.addEventListener('input', function() {
+        descCount.textContent = descInput.value.length;
+    });
+
+    let guestFaceCount = {{ event.faces.count }};
+    
+    // Dynamically add guest face input fields based on count
+    function updateGuestFaces() {
+        const currentFaces = {{ event.faces.count }};
+        guestFacesContainer.innerHTML = '';
+        
+        for (let i = currentFaces + 1; i <= 3; i++) {
+            guestFacesContainer.innerHTML += `
+                <div class="input-group mb-3">
+                    <span class=""><i class="fas fa-upload"></i></span>
+                    <input type="file" name="new_faces_${i}" accept="image/jpeg,image/png" class="neon-input w-full">
+                </div>
+            `;
+        }
+    }
+
+    // Initialize the guest face inputs
+    updateGuestFaces();
+});
+</script>
+{% endblock %}
+

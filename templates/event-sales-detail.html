@@ -1,0 +1,363 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ event.name }} Sales Dashboard – Vibe with Epic Moments{% endblock %}
+
+{% block extra_link %}
+    <link rel="stylesheet" href="{% static 'css/event-sales-detail.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="event-sales-detail-container">
+    <div class="row g-0">
+        <!-- Sidebar -->
+      
+            {% include 'partials/sidebar.html' %}
+        
+
+        <!-- Main Content -->
+        <main class="col-md-10 main-content px-md-4">
+            <div class="dashboard-header" data-aos="zoom-in">
+                <div class="header-content">
+                    <h1 class="neon-glitch">{{ event.name }} <span class="badge neon-badge bg-primary">Sales Dashboard</span></h1>
+                    <div class="header-actions">
+                        <a href="{% url 'export_event_sales_report' event.id %}" class="btn neon-button">
+                            <i class="fas fa-download me-2"></i>Export Sales Report
+                        </a>
+                    </div>
+                </div>
+                <div class="event-meta">
+                    <span><i class="fas fa-calendar-day me-2"></i>{{ event.date|date:"F j, Y" }}</span>
+                    <span><i class="fas fa-map-marker-alt me-2"></i>{{ event.location }}</span>
+                    <span><i class="fas fa-info-circle me-2"></i>{{ event.description|truncatechars:50 }}</span>
+                </div>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="metrics-grid">
+                <div class="metric-card total-sales glass-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="metric-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h5>Total Tickets Sold</h5>
+                        <h2 class="neon-text">{{ total_sales }}</h2>
+                        <div class="metric-trend {% if sales_change >= 0 %}up{% else %}down{% endif %}" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ sales_change|floatformat:1 }}% from last event">
+                            <i class="fas {% if sales_change >= 0 %}fa-arrow-up{% else %}fa-arrow-down{% endif %}"></i>
+                            {{ sales_change|floatformat:1 }}% from last event
+                        </div>
+                    </div>
+                </div>
+                <div class="metric-card total-revenue glass-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="metric-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h5>Total Revenue</h5>
+                        <h2 class="neon-text">{{ total_revenue|floatformat:2 }} PKR</h2>
+                        <div class="metric-trend {% if revenue_change >= 0 %}up{% else %}down{% endif %}" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ revenue_change|floatformat:1 }}% from last event">
+                            <i class="fas {% if revenue_change >= 0 %}fa-arrow-up{% else %}fa-arrow-down{% endif %}"></i>
+                            {{ revenue_change|floatformat:1 }}% from last event
+                        </div>
+                    </div>
+                </div>
+                <div class="metric-card remaining-tickets glass-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="metric-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h5>Remaining Tickets</h5>
+                        <h2 class="neon-text">{{ remaining_tickets }}</h2>
+                        <div class="metric-trend {% if remaining_change >= 0 %}up{% else %}down{% endif %}" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ remaining_change|floatformat:1 }}% from last event">
+                            <i class="fas {% if remaining_change >= 0 %}fa-arrow-up{% else %}fa-arrow-down{% endif %}"></i>
+                            {{ remaining_change|floatformat:1 }}% from last event
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row charts-row">
+                <div class="col-lg-12" data-aos="fade-up">
+                    <div class="card ticket-distribution-card glass-card">
+                        <div class="card-header">
+                            <h4 class="neon-subtitle"><i class="fas fa-chart-pie me-2"></i>Ticket Distribution</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="col-lg-6">
+                                    <canvas id="ticket-distribution-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ticket Sales Breakdown -->
+            <div class="card sales-breakdown-card glass-card" data-aos="fade-up">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="neon-subtitle"><i class="fas fa-table me-2"></i>Ticket Sales Breakdown</h4>
+                    <div class="d-flex align-items-center gap-3">
+                        <select id="sort-filter" class="neon-input">
+                            <option value="name">Sort by Ticket Type</option>
+                            <option value="sales-desc">Sort by Sales (High to Low)</option>
+                            <option value="revenue-desc">Sort by Revenue (High to Low)</option>
+                        </select>
+                        <div class="search-box">
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-end-0">
+                                    <i class="fas fa-search text-muted"></i>
+                                </span>
+                                <input type="text" class="form-control border-start-0 neon-input search-input" placeholder="Search ticket types...">
+                                <span class="input-group-text bg-transparent border-start-0 clear-search" style="display: none;">
+                                    <i class="fas fa-times text-muted"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-dark">
+                            <thead>
+                                <tr>
+                                    <th>Ticket Type</th>
+                                    <th class="text-end">Price</th>
+                                    <th class="text-end">Sold</th>
+                                    <th class="text-end">Remaining</th>
+                                    <th class="text-end">Revenue</th>
+                                    <th class="text-end">% of Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sales-table-body">
+                                {% if ticket_sales_data %}
+                                    {% for data in ticket_sales_data %}
+                                        <tr class="{% if data.remaining_tickets == 0 %}sold-out{% endif %}" data-name="{{ data.ticket.name|lower }}" data-sales="{{ data.ticket_sales_quantity }}" data-revenue="{{ data.ticket_sales_revenue }}">
+                                            <td>
+                                                <div class="ticket-type-info">
+                                                    <span class="ticket-color" style="background-color: {{ data.ticket.color|default:'#6c5ce7' }}"></span>
+                                                    {{ data.ticket.name }}
+                                                </div>
+                                            </td>
+                                            <td class="text-end">{{ data.ticket.price|floatformat:2 }} PKR</td>
+                                            <td class="text-end">{{ data.ticket_sales_quantity }}</td>
+                                            <td class="text-end">{{ data.remaining_tickets }}</td>
+                                            <td class="text-end">{{ data.ticket_sales_revenue|floatformat:2 }} PKR</td>
+                                            <td class="text-end">{{ data.percentage|floatformat:1 }}%</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4">No ticket sales data available.</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                            <tfoot>
+                                <tr class="table-light">
+                                    <th>Total</th>
+                                    <th class="text-end"></th>
+                                    <th class="text-end">{{ total_sales }}</th>
+                                    <th class="text-end">{{ remaining_tickets }}</th>
+                                    <th class="text-end">{{ total_revenue|floatformat:2 }} PKR</th>
+                                    <th class="text-end">100%</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Performing Tickets -->
+            <div class="card top-tickets-card glass-card" data-aos="fade-up">
+                <div class="card-header">
+                    <h4 class="neon-subtitle"><i class="fas fa-trophy me-2"></i>Top Performing Tickets (By Revenue)</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% if top_tickets %}
+                            {% for ticket in top_tickets %}
+                                <div class="col-md-{% if top_tickets|length == 1 %}12{% elif top_tickets|length == 2 %}6{% else %}4{% endif %} mb-4">
+                                    <div class="top-ticket-item glass-card rank-{{ forloop.counter }}" data-aos="fade-up" data-aos-delay="{% cycle '100' '200' '300' %}">
+                                        <div class="rank-badge neon-badge">#{{ forloop.counter }}</div>
+                                        <div class="ticket-content">
+                                            <h5 class="ms-4">{{ ticket.ticket.name }}</h5>
+
+                                            <div class="ticket-stats">
+                                                <div class="stat-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Tickets Sold">
+                                                    <span class="stat-label">Sold</span>
+                                                    <span class="stat-value neon-text">{{ ticket.ticket_sales_quantity }}</span>
+                                                </div>
+                                                <div class="stat-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Revenue Generated">
+                                                    <span class="stat-label">Revenue</span>
+                                                    <span class="stat-value neon-text">{{ ticket.ticket_sales_revenue|floatformat:2 }} PKR</span>
+                                                </div>
+                                                <div class="stat-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Tickets Remaining">
+                                                    <span class="stat-label">Remaining</span>
+                                                    <span class="stat-value neon-text">{{ ticket.remaining_tickets }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="progress">
+                                                <div class="progress-bar neon-progress" 
+                                                     style="width: {{ ticket.percentage }}%; background: linear-gradient(45deg, #ff2e63, #00ffcc);"
+                                                     role="progressbar" 
+                                                     aria-valuenow="{{ ticket.percentage }}" 
+                                                     aria-valuemin="0" 
+                                                     aria-valuemax="100">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="col-12">
+                                <div class="empty-state glass-card text-center py-4">
+                                    <i class="fas fa-ticket-alt"></i>
+                                    <p>No tickets have been sold yet.</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize AOS
+    AOS.init({ duration: 800, once: true });
+
+    // Initialize Tooltips
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+    // Glitch Effect for Title
+    const glitchElements = document.querySelectorAll('.neon-glitch');
+    glitchElements.forEach(el => {
+        setInterval(() => {
+            el.style.textShadow = `2px 2px 5px #ff2e63, -2px -2px 5px #00ffcc`;
+            el.style.transform = `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`;
+            setTimeout(() => {
+                el.style.textShadow = `0 0 10px #ff2e63, 0 0 20px #00ffcc`;
+                el.style.transform = 'translate(0, 0)';
+            }, 150);
+        }, 2500);
+    });
+
+    // Ticket Distribution Chart
+    const ticketDistCtx = document.getElementById('ticket-distribution-chart').getContext('2d');
+    new Chart(ticketDistCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ ticket_distribution_labels|safe }},
+            datasets: [{
+                data: {{ ticket_distribution_data|safe }},
+                backgroundColor: ['#ff2e63', '#00ffcc', '#6c5ce7', '#fdcb6e', '#e17055', '#d63031'],
+                borderWidth: 0,
+                hoverOffset: 20
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        color: '#ffffff',
+                        font: { family: 'Poppins', size: 14 }
+                    }
+                },
+                datalabels: {
+                    formatter: (value, ctx) => {
+                        let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                        let percentage = (value * 100 / sum).toFixed(1) + "%";
+                        return percentage;
+                    },
+                    color: '#ffffff',
+                    font: { weight: 'bold', family: 'Poppins' }
+                },
+                centerText: {
+                    display: true,
+                    text: `Total: {{ total_sales }}`
+                }
+            },
+            cutout: '70%',
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        },
+        plugins: [ChartDataLabels, {
+            id: 'centerText',
+            afterDraw(chart) {
+                if (chart.config.options.plugins.centerText.display) {
+                    const ctx = chart.ctx;
+                    const centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
+                    const centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2;
+                    ctx.save();
+                    ctx.font = 'bold 16px Orbitron';
+                    ctx.fillStyle = '#00ffcc';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(chart.config.options.plugins.centerText.text, centerX, centerY);
+                    ctx.restore();
+                }
+            }
+        }]
+    });
+
+    // Search Functionality
+    const searchInput = document.querySelector('.search-input');
+    const clearSearch = document.querySelector('.clear-search');
+    const tableRows = document.querySelectorAll('#sales-table-body tr');
+
+    searchInput.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        clearSearch.style.display = searchTerm ? 'block' : 'none';
+        tableRows.forEach(row => {
+            const ticketName = row.getAttribute('data-name');
+            row.style.display = ticketName.includes(searchTerm) ? '' : 'none';
+        });
+    });
+
+    clearSearch.addEventListener('click', function() {
+        searchInput.value = '';
+        clearSearch.style.display = 'none';
+        tableRows.forEach(row => row.style.display = '');
+        searchInput.focus();
+    });
+
+    // Sort Functionality
+    const sortFilter = document.getElementById('sort-filter');
+    sortFilter.addEventListener('change', function() {
+        const sortValue = this.value;
+        const tbody = document.getElementById('sales-table-body');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        rows.sort((a, b) => {
+            if (sortValue === 'name') {
+                return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
+            } else if (sortValue === 'sales-desc') {
+                return parseInt(b.getAttribute('data-sales')) - parseInt(a.getAttribute('data-sales'));
+            } else if (sortValue === 'revenue-desc') {
+                return parseFloat(b.getAttribute('data-revenue')) - parseFloat(a.getAttribute('data-revenue'));
+            }
+        });
+
+        tbody.innerHTML = '';
+        rows.forEach(row => tbody.appendChild(row));
+    });
+});
+</script>
+{% endblock %}

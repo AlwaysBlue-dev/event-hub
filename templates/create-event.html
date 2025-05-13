@@ -1,0 +1,671 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Event - Vibe with Epic Moments{% endblock %}
+
+{% block extra_link %}
+    <link rel="stylesheet" href="{% static 'css/create-event.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+{% load static %}
+<div class="event-creation-container">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        {% include 'partials/sidebar.html' %}
+
+        <!-- Main Content -->
+        <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4 mt-3">
+            <div class="create-event-wrapper">
+                <!-- Progress Steps -->
+                <div class="creation-progress" data-aos="fade-down">
+                    <div class="progress-step active">
+                        <div class="step-number neon-step">1</div>
+                        <div class="step-label">Basic Info</div>
+                    </div>
+                    <div class="progress-step">
+                        <div class="step-number neon-step">2</div>
+                        <div class="step-label">Tickets</div>
+                    </div>
+                    <div class="progress-step">
+                        <div class="step-number neon-step">3</div>
+                        <div class="step-label">Media</div>
+                    </div>
+                    <div class="progress-step">
+                        <div class="step-number neon-step">4</div>
+                        <div class="step-label">Payment</div>
+                    </div>
+                </div>
+
+                <h1 class="page-title neon-glitch" data-aos="zoom-in">
+                    <i class="fas fa-calendar-plus me-2"></i>Create New Vibe
+                </h1>
+
+                {% if messages %}
+                <div class="alerts">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <form method="POST" enctype="multipart/form-data" class="event-form glass-form">
+                    {% csrf_token %}
+                    
+                    <!-- SECTION 1: Basic Event Details -->
+                    <div class="form-section glass-section" data-aos="fade-up">
+                        <div class="section-header">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <h2 class="neon-subtitle">Event Details</h2>
+                        </div>
+                        
+                        <!-- Event Image -->
+                        <div class="form-group image-upload neon-upload">
+                            <label class="form-label">
+                                Event Banner Image <span class="required">*</span>
+                                <span class="info-tooltip" data-bs-toggle="tooltip" title="Recommended size: 1200x630px">
+                                    <i class="fas fa-info-circle"></i>
+                                </span>
+                            </label>
+                            <div class="upload-area" id="imageUploadArea">
+                                <div class="upload-preview">
+                                    <i class="fas fa-image"></i>
+                                    <p>Click to upload or drag & drop</p>
+                                    <small>JPG, JPEG, or PNG (Max 5MB)</small>
+                                    <button type="button" class="remove-image neon-button" style="display: none;">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                <input type="file" name="image" id="image" class="form-control" accept="image/jpeg,image/png">
+                            </div>
+                        </div>
+
+                        <!-- Event Name & Category -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="event-name" class="form-label">Event Name <span class="required">*</span></label>
+                                    <input type="text" name="event-name" class="form-control neon-input" id="event-name" placeholder="e.g. Neon Rave 2025" required value="{{ form_data.event_name }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="category" class="form-label">Event Category <span class="required">*</span></label>
+                                    <select class="form-control neon-input" name="category" id="category" required>
+                                        <option value="" disabled {% if not form_data.category %}selected{% endif %}>Select a category</option>
+                                        <option value="Concerts" {% if form_data.category == "Concerts" %}selected{% endif %}>Concert</option>
+                                        <option value="Technology" {% if form_data.category == "Technology" %}selected{% endif %}>Technology</option>
+                                        <option value="Food & Drink" {% if form_data.category == "Food & Drink" %}selected{% endif %}>Food & Drink</option>
+                                        <option value="Sports & Fitness" {% if form_data.category == "Sports & Fitness" %}selected{% endif %}>Sports & Fitness</option>
+                                        <option value="Education & Career" {% if form_data.category == "Education & Career" %}selected{% endif %}>Education & Career</option>
+                                        <option value="Arts & Creativity" {% if form_data.category == "Arts & Creativity" %}selected{% endif %}>Arts & Creativity</option>
+                                        <option value="Entertainment & Culture" {% if form_data.category == "Entertainment & Culture" %}selected{% endif %}>Entertainment & Culture</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-group">
+                            <label for="description" class="form-label">Description <span class="required">*</span></label>
+                            <textarea class="form-control neon-input" name="description" id="description" rows="4" required maxlength="500">{{ form_data.description }}</textarea>
+                            <div class="form-footer">
+                                <small class="char-counter"><span id="char-count">{{ form_data.description|length }}</span>/500 characters</small>
+                                <small>Tell attendees what to expect at your event</small>
+                            </div>
+                        </div>
+
+                        <!-- Date & Time -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="date" class="form-label">Event Date <span class="required">*</span></label>
+                                    <div class="input-with-icon">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <input type="date" name="date" class="form-control neon-input" id="date" required value="{{ form_data.date }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="time" class="form-label">Event Time <span class="required">*</span></label>
+                                    <div class="input-with-icon">
+                                        <i class="fas fa-clock"></i>
+                                        <input type="time" name="time" class="form-control neon-input" id="time" required value="{{ form_data.time }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: Location Details -->
+                    <div class="form-section glass-section" data-aos="fade-up" data-aos-delay="100">
+                        <div class="section-header">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            <h2 class="neon-subtitle">Location Information</h2>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="country" class="form-label">Country <span class="required">*</span></label>
+                                    <div class="input-with-icon">
+                                        <i class="fas fa-globe"></i>
+                                        <input type="text" name="country" id="country" class="form-control neon-input" value="Pakistan" readonly required>
+                                    </div>
+                                    <small class="form-note">Currently only available in Pakistan</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="city" class="form-label">City <span class="required">*</span></label>
+                                    <div class="input-with-icon">
+                                        <i class="fas fa-city"></i>
+                                        <select name="city" id="city" class="form-control neon-input" required>
+                                            <option value="" {% if not form_data.city %}selected{% endif %}>Select City</option>
+                                            <option value="Karachi" {% if form_data.city == "Karachi" %}selected{% endif %}>Karachi</option>
+                                            <option value="Lahore" {% if form_data.city == "Lahore" %}selected{% endif %}>Lahore</option>
+                                            <option value="Islamabad" {% if form_data.city == "Islamabad" %}selected{% endif %}>Islamabad</option>
+                                            <option value="Rawalpindi" {% if form_data.city == "Rawalpindi" %}selected{% endif %}>Rawalpindi</option>
+                                            <option value="Peshawar" {% if form_data.city == "Peshawar" %}selected{% endif %}>Peshawar</option>
+                                            <option value="Faisalabad" {% if form_data.city == "Faisalabad" %}selected{% endif %}>Faisalabad</option>
+                                            <option value="Multan" {% if form_data.city == "Multan" %}selected{% endif %}>Multan</option>
+                                            <option value="Hyderabad" {% if form_data.city == "Hyderabad" %}selected{% endif %}>Hyderabad</option>
+                                            <option value="Quetta" {% if form_data.city == "Quetta" %}selected{% endif %}>Quetta</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location" class="form-label">Venue/Area <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-map-pin"></i>
+                                <input type="text" name="location" id="location" class="form-control neon-input" placeholder="e.g. Clifton Center, DHA Phase 1" value="{{ form_data.location }}" required>
+                            </div>
+                            <small class="form-note">Enter the specific venue name or area</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="map_link" class="form-label">Google Maps Link <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-link"></i>
+                                <input type="url" name="map_link" id="map_link" class="form-control neon-input" placeholder="https://goo.gl/maps/..." value="{{ form_data.map_link }}" required>
+                            </div>
+                            <small class="form-note text-muted">
+                                <i class="fas fa-info-circle me-1"></i>
+                                <a href="https://maps.google.com" target="_blank" class="neon-link">Get a link from Google Maps</a>: Search your location → Click "Share" → Copy the link.
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="capacity" class="form-label">Maximum Capacity</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-users"></i>
+                                <input type="number" name="capacity" class="form-control neon-input" id="capacity" placeholder="Leave empty for unlimited" value="{{ form_data.capacity }}" min="1">
+                            </div>
+                        </div>
+
+                        <div class="form-group form-check form-switch">
+                            <input class="form-check-input neon-switch" type="checkbox" name="is-free-event" role="switch" id="is-free-event" {% if form_data.is_free_event %}checked{% endif %}>
+                            <label class="form-check-label" for="is-free-event">This is a free event</label>
+                            <small class="form-note">Toggle ON if no tickets will be sold</small>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: Ticket Types -->
+                    <div class="form-section glass-section" id="ticket-section" data-aos="fade-up" data-aos-delay="200">
+                        <div class="section-header">
+                            <i class="fas fa-ticket-alt me-2"></i>
+                            <h2 class="neon-subtitle">Ticket Types</h2>
+                        </div>
+
+                        <div id="ticket-types-container">
+                            {% for ticket in ticket_types %}
+                            <div class="ticket-type-card neon-card">
+                                <div class="ticket-header">
+                                    <h5>Ticket Type #{{ forloop.counter }}</h5>
+                                    <button type="button" class="btn btn-sm btn-danger remove-ticket neon-button" {% if forloop.counter == 1 %}disabled{% endif %}>
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Name <span class="required">*</span></label>
+                                            <input type="text" name="ticket-name" class="form-control neon-input" placeholder="e.g. General Admission" required value="{{ ticket.name }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Price (PKR) <span class="required">*</span></label>
+                                            <input type="number" name="ticket-price" class="form-control neon-input" placeholder="0.00" {% if form_data.is_free_event %}readonly value="0"{% else %}required value="{{ ticket.price }}"{% endif %}>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Quantity <span class="required">*</span></label>
+                                            <input type="number" name="ticket-quantity" class="form-control neon-input" placeholder="e.g. 1000" required value="{{ ticket.quantity }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <button type="button" id="add-ticket-type" class="btn btn-outline-primary neon-button">
+                            <i class="fas fa-plus me-2"></i>Add Another Ticket Type
+                        </button>
+                    </div>
+
+                    <!-- SECTION 4: Event Highlights -->
+                    <div class="form-section glass-section" data-aos="fade-up" data-aos-delay="300">
+                        <div class="section-header">
+                            <i class="fas fa-star me-2"></i>
+                            <h2 class="neon-subtitle">Event Highlights</h2>
+                        </div>
+
+                        <div class="row">
+                            {% for highlight in highlights %}
+                            <div class="col-md-4">
+                                <div class="form-group highlight-input">
+                                    <label>Highlight #{{ forloop.counter }} <span class="required">*</span></label>
+                                    <div class="input-with-icon">
+                                        <i class="fas fa-bolt"></i>
+                                        <input type="text" name="highlights" class="form-control neon-input" 
+                                            {% if forloop.counter == 1 %}
+                                                placeholder="e.g. Live DJ Set"
+                                            {% elif forloop.counter == 2 %}
+                                                placeholder="e.g. Neon Light Show"
+                                            {% elif forloop.counter == 3 %}
+                                                placeholder="e.g. VIP Lounge"
+                                            {% endif %}
+                                            required value="{{ highlight }}">
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- SECTION 5: Media & Visuals -->
+                    <div class="form-section glass-section" data-aos="fade-up" data-aos-delay="400">
+                        <div class="section-header">
+                            <i class="fas fa-images me-2"></i>
+                            <h2 class="neon-subtitle">Media & Visuals</h2>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Guest Faces (Optional)
+                                <span class="info-tooltip" data-bs-toggle="tooltip" title="Recommended size: 300x300px">
+                                    <i class="fas fa-info-circle"></i>
+                                </span>
+                            </label>
+                            <small class="form-note">Upload photos of special guests or speakers</small>
+                            <div class="row">
+                                {% for i in "123" %}
+                                <div class="col-md-4">
+                                    <div class="media-upload neon-upload">
+                                        <div class="upload-preview guest-face rounded-circle">
+                                            <i class="fas fa-user-tie"></i>
+                                            <p>Guest {{ forloop.counter }}</p>
+                                            <button type="button" class="remove-image neon-button" style="display: none;">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                        <input type="file" name="guest_face_{{ forloop.counter }}" class="form-control" accept="image/jpeg,image/png">
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Carousel Images (Optional)
+                                <span class="info-tooltip" data-bs-toggle="tooltip" title="Recommended size: 1200x630px">
+                                    <i class="fas fa-info-circle"></i>
+                                </span>
+                            </label>
+                            <small class="form-note">Upload images for event slideshow</small>
+                            <div class="row">
+                                {% for i in "1234" %}
+                                <div class="col-md-3">
+                                    <div class="media-upload neon-upload">
+                                        <div class="upload-preview carousel-image">
+                                            <i class="fas fa-image"></i>
+                                            <p>Image {{ forloop.counter }}</p>
+                                            <button type="button" class="remove-image neon-button" style="display: none;">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                        <input type="file" name="carousel_image_{{ forloop.counter }}" class="form-control" accept="image/jpeg,image/png">
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 6: Payment Information -->
+                    <div class="form-section glass-section" id="payment-section" data-aos="fade-up" data-aos-delay="500">
+                        <div class="section-header">
+                            <i class="fas fa-credit-card me-2"></i>
+                            <h2 class="neon-subtitle">Payment Information</h2>
+                        </div>
+
+                        <div id="bank-accounts-container">
+                            {% for account in bank_accounts %}
+                            <div class="bank-account-card neon-card">
+                                <div class="bank-header">
+                                    <h5>Bank Account #{{ forloop.counter }}</h5>
+                                    <button type="button" class="btn btn-sm btn-danger remove-bank neon-button" {% if forloop.counter == 1 %}disabled{% endif %}>
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Bank Name <span class="required">*</span></label>
+                                            <input type="text" name="bank-name" class="form-control neon-input" placeholder="e.g. HBL" required value="{{ account.bank_name }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Account Title <span class="required">*</span></label>
+                                            <input type="text" name="account-title" class="form-control neon-input" placeholder="Account Holder Name" required value="{{ account.account_title }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>IBAN/Account # <span class="required">*</span></label>
+                                            <input type="text" name="iban-number" class="form-control neon-input" placeholder="PK00XXXX0000000000000000" required value="{{ account.iban_number }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <button type="button" id="add-bank-account" class="btn btn-outline-primary neon-button">
+                            <i class="fas fa-plus me-2"></i>Add Another Bank Account
+                        </button>
+                    </div>
+
+                    <!-- Form Submission -->
+                    <div class="form-actions" data-aos="fade-up" data-aos-delay="600">
+                        <button type="submit" class="btn neon-button pulse">
+                            <i class="fas fa-calendar-check me-2"></i>Create Event
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize AOS
+    AOS.init({ duration: 800, once: true });
+
+    // Initialize tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // Glitch Effect for Title
+    const glitchElements = document.querySelectorAll('.neon-glitch');
+    glitchElements.forEach(el => {
+        setInterval(() => {
+            el.style.textShadow = `2px 2px 5px #ff2e63, -2px -2px 5px #00ffcc`;
+            el.style.transform = `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`;
+            setTimeout(() => {
+                el.style.textShadow = `0 0 10px #ff2e63, 0 0 20px #00ffcc`;
+                el.style.transform = 'translate(0, 0)';
+            }, 150);
+        }, 2500);
+    });
+
+    // Character counter for description
+    const description = document.getElementById('description');
+    const charCount = document.getElementById('char-count');
+    
+    description.addEventListener('input', function() {
+        charCount.textContent = this.value.length;
+    });
+    charCount.textContent = description.value.length;
+
+    // Image upload preview
+    function setupImageUpload(uploadArea, input) {
+        const uploadPreview = uploadArea.querySelector('.upload-preview');
+        const removeButton = uploadPreview.querySelector('.remove-image');
+        const isGuestFace = uploadPreview.classList.contains('guest-face');
+        const isCarousel = uploadPreview.classList.contains('carousel-image');
+        
+        // Default preview content
+        const defaultContent = isGuestFace
+            ? `<i class="fas fa-user-tie"></i><p>Guest ${input.name.split('_')[2]}</p>`
+            : isCarousel
+            ? `<i class="fas fa-image"></i><p>Image ${input.name.split('_')[2]}</p>`
+            : `<i class="fas fa-image"></i><p>Click to upload or drag & drop</p><small>JPG, JPEG, or PNG (Max 5MB)</small>`;
+        
+        input.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadPreview.innerHTML = `<img src="${e.target.result}" alt="Preview"><button type="button" class="remove-image neon-button"><i class="fas fa-trash"></i></button>`;
+                    uploadPreview.querySelector('.remove-image').style.display = 'block';
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        uploadArea.addEventListener('click', function(e) {
+            if (e.target.closest('.remove-image')) {
+                input.value = '';
+                uploadPreview.innerHTML = `${defaultContent}<button type="button" class="remove-image neon-button" style="display: none;"><i class="fas fa-trash"></i></button>`;
+            }
+        });
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight() {
+            uploadArea.classList.add('highlight');
+        }
+
+        function unhighlight() {
+            uploadArea.classList.remove('highlight');
+        }
+
+        uploadArea.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            input.files = files;
+            const event = new Event('change');
+            input.dispatchEvent(event);
+        }
+    }
+
+    // Setup main image upload
+    const imageUploadArea = document.getElementById('imageUploadArea');
+    const imageInput = imageUploadArea.querySelector('input[type="file"]');
+    setupImageUpload(imageUploadArea, imageInput);
+
+    // Setup media uploads
+    document.querySelectorAll('.media-upload').forEach(upload => {
+        const input = upload.querySelector('input[type="file"]');
+        setupImageUpload(upload, input);
+    });
+
+    // Free event toggle
+    const freeEventToggle = document.getElementById('is-free-event');
+    freeEventToggle.addEventListener('change', function() {
+        const isFree = this.checked;
+        const ticketPrices = document.querySelectorAll('input[name="ticket-price"]');
+        const paymentSection = document.getElementById('payment-section');
+        
+        ticketPrices.forEach(input => {
+            input.disabled = isFree;
+            if (isFree) input.value = 0;
+            else input.value = '';
+        });
+        
+        paymentSection.style.display = isFree ? 'none' : 'block';
+        
+        if (isFree) {
+            const ticketTypes = document.querySelectorAll('.ticket-type-card');
+            if (ticketTypes.length > 1) {
+                alert('For free events, only one ticket type is allowed.');
+                for (let i = 1; i < ticketTypes.length; i++) {
+                    ticketTypes[i].remove();
+                }
+            }
+        }
+    });
+
+    // Add ticket type
+    let ticketCounter = 1;
+    document.getElementById('add-ticket-type').addEventListener('click', function() {
+        if (freeEventToggle.checked) {
+            alert('You can only add one ticket type for a free event.');
+            return;
+        }
+        
+        ticketCounter++;
+        const container = document.getElementById('ticket-types-container');
+        const newTicket = document.createElement('div');
+        newTicket.className = 'ticket-type-card neon-card';
+        newTicket.innerHTML = `
+            <div class="ticket-header">
+                <h5>Ticket Type #${ticketCounter}</h5>
+                <button type="button" class="btn btn-sm btn-danger remove-ticket neon-button">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Name <span class="required">*</span></label>
+                        <input type="text" name="ticket-name" class="form-control neon-input" placeholder="e.g. VIP Access" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Price (PKR) <span class="required">*</span></label>
+                        <input type="number" name="ticket-price" class="form-control neon-input" placeholder="0.00" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Quantity <span class="required">*</span></label>
+                        <input type="number" name="ticket-quantity" class="form-control neon-input" placeholder="e.g. 1000" required>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.appendChild(newTicket);
+    });
+
+    // Remove ticket type
+    document.getElementById('ticket-types-container').addEventListener('click', function(e) {
+        if (e.target.closest('.remove-ticket')) {
+            const ticketCard = e.target.closest('.ticket-type-card');
+            if (document.querySelectorAll('.ticket-type-card').length > 1) {
+                ticketCard.remove();
+                const tickets = document.querySelectorAll('.ticket-type-card');
+                tickets.forEach((ticket, index) => {
+                    ticket.querySelector('.ticket-header h5').textContent = `Ticket Type #${index + 1}`;
+                });
+                ticketCounter = tickets.length;
+            }
+        }
+    });
+
+    // Add bank account
+    let bankCounter = 1;
+    document.getElementById('add-bank-account').addEventListener('click', function() {
+        if (bankCounter >= 2) {
+            alert('You can only add up to 2 bank accounts.');
+            return;
+        }
+        
+        bankCounter++;
+        const container = document.getElementById('bank-accounts-container');
+        const newBank = document.createElement('div');
+        newBank.className = 'bank-account-card neon-card';
+        newBank.innerHTML = `
+            <div class="bank-header">
+                <h5>Bank Account #${bankCounter}</h5>
+                <button type="button" class="btn btn-sm btn-danger remove-bank neon-button">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Bank Name <span class="required">*</span></label>
+                        <input type="text" name="bank-name" class="form-control neon-input" placeholder="e.g. MCB" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Account Title <span class="required">*</span></label>
+                        <input type="text" name="account-title" class="form-control neon-input" placeholder="Account Holder Name" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>IBAN/Account # <span class="required">*</span></label>
+                        <input type="text" name="iban-number" class="form-control neon-input" placeholder="PK00XXXX0000000000000000" required>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.appendChild(newBank);
+    });
+
+    // Remove bank account
+    document.getElementById('bank-accounts-container').addEventListener('click', function(e) {
+        if (e.target.closest('.remove-bank')) {
+            const bankCard = e.target.closest('.bank-account-card');
+            if (document.querySelectorAll('.bank-account-card').length > 1) {
+                bankCard.remove();
+                const banks = document.querySelectorAll('.bank-account-card');
+                banks.forEach((bank, index) => {
+                    bank.querySelector('.bank-header h5').textContent = `Bank Account #${index + 1}`;
+                });
+                bankCounter = banks.length;
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

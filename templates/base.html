@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Event Management Software{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+   <!--Font Awesome for Icons -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+   <script src="https://cdn.jsdelivr.net/npm/decimal.js@10.4.3/decimal.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    {% block extra_link %}{% endblock %}
+    <style>
+        {% block styles %}{% endblock %}
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">EventManager</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'events' %}">Events</a></li>
+                {% if user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'cart' %}">Cart</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'user-profile' request.user.username %}">Profile</a>
+                </li>                
+                
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+                
+                
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+{% if messages and request.path != '/register/' and request.path != '/login/' %}
+<div id="message-container" class="container mt-3">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show text-center rounded shadow-lg px-4 py-3 mb-3" role="alert">
+            <div class="d-flex align-items-center justify-content-center">
+                {% if message.tags == 'info' %}
+                    <i class="fa fa-info-circle" style="font-size: 1.75rem; margin-right: 15px; color: #17a2b8;"></i>
+                {% elif message.tags == 'success' %}
+                    <i class="fa fa-check-circle" style="font-size: 1.75rem; margin-right: 15px; color: #28a745;"></i>
+                {% elif message.tags == 'warning' %}
+                    <i class="fa fa-exclamation-triangle" style="font-size: 1.75rem; margin-right: 15px; color: #ffc107;"></i>
+                {% elif message.tags == 'error' %}
+                    <i class="fa fa-times-circle" style="font-size: 1.75rem; margin-right: 15px; color: #dc3545;"></i>
+                {% endif %}
+                <span style="font-size: 1.1rem; font-weight: 600; color: #333;">{{ message }}</span>
+            </div>
+            <button type="button" class="btn-close btn-close-black" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+  
+  
+<!-- Page Content -->
+<main>
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <footer class="footer-container">
+    <div class="container">
+        <div class="row">
+            <!-- Brand -->
+            <div class="col-md-4 brand" data-aos="fade-up">
+                <h3 class="neon-heading neon-glitch" data-text="EventManager">EventManager</h3>
+                <p>Plan, manage, and celebrate your events with ease.</p>
+                <div class="social-icons">
+                    <a href="#" class="neon-icon" data-aos="zoom-in" data-aos-delay="100">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="neon-icon" data-aos="zoom-in" data-aos-delay="200">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="neon-icon" data-aos="zoom-in" data-aos-delay="300">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="neon-icon" data-aos="zoom-in" data-aos-delay="400">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Quick Links -->
+            <div class="col-md-4 links" data-aos="fade-up" data-aos-delay="100">
+                <h4 class="neon-subheading">Quick Links</h4>
+                <ul>
+                    <li><a href="#" class="neon-link">Home</a></li>
+                    <li><a href="#" class="neon-link">Events</a></li>
+                    <li><a href="#" class="neon-link">Pricing</a></li>
+                    <li><a href="#" class="neon-link">Contact</a></li>
+                </ul>
+            </div>
+            <!-- Contact -->
+            <div class="col-md-4 contact" data-aos="fade-up" data-aos-delay="200">
+                <h4 class="neon-subheading">Contact Us</h4>
+                <p><i class="fas fa-envelope neon-icon"></i> support@eventmanager.com</p>
+                <p><i class="fas fa-phone neon-icon"></i> (123) 456-7890</p>
+                <p><i class="fas fa-map-marker-alt neon-icon"></i> 123 Event St, City</p>
+            </div>
+            {% comment %} <!-- Newsletter -->
+            <div class="col-md-6 newsletter m-auto" data-aos="fade-up" data-aos-delay="300">
+                <h4 class="neon-subheading text-center">Newsletter</h4>
+                <form class="d-flex gap-2">
+                    <input type="email" class="form-control neon-input" placeholder="Your email" required>
+                    <button type="submit" class="neon-button">Subscribe</button>
+                </form>
+            </div> {% endcomment %}
+        </div>
+    </div>
+    <div class="bottom">
+        <p>© 2025 EventManager. All rights reserved. Designed with <span class="neon-heart">♥</span> by Team EventManager</p>
+    </div>
+</footer>
+
+
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+ <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const container = document.getElementById('message-container');
+      const alerts = container?.querySelectorAll('.alert');
+  
+      alerts?.forEach(alert => {
+        alert.addEventListener('closed.bs.alert', () => {
+          if (container.querySelectorAll('.alert.show').length === 0) {
+            container.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    setTimeout(() => {
+        const alert = document.querySelector('.alert');
+        if (alert) {
+          bootstrap.Alert.getOrCreateInstance(alert).close();
+        }
+      }, 5000);
+      
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const glitchElements = document.querySelectorAll('.footer-container .neon-glitch');
+        glitchElements.forEach(el => {
+            setInterval(() => {
+                el.style.textShadow = `2px 2px 5px #ff2e63, -2px -2px 5px #00ffcc`;
+                el.style.transform = `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`;
+                setTimeout(() => {
+                    el.style.textShadow = `0 0 10px #ff2e63, 0 0 20px #00ffcc`;
+                    el.style.transform = 'translate(0, 0)';
+                }, 150);
+            }, Math.random() * 2000 + 2000);
+        });
+    });
+  </script>
+
+  
+
+</body>
+
+</html>

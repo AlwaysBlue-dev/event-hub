@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ticket Verified - EventManager{% endblock %}
+
+{% block extra_link %}
+    <link rel="stylesheet" href="{% static 'css/ticket-verified.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+   
+{% endblock %}
+
+{% block content %}
+<section class="ticket-container">
+    <div class="container text-center">
+        <h2 class="neon-heading neon-glitch" data-text="Ticket Verified Successfully!" data-aos="zoom-in">
+            <i class="fas fa-check-circle neon-icon me-2"></i>Ticket Verified Successfully!
+        </h2>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="neon-card glass-panel" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-body">
+                        <div class="ticket-details" data-aos="fade-up" data-aos-delay="200">
+                            <p><strong>Order ID:</strong> {{ qr_data.order_id }}</p>
+                            <p><strong>User Email:</strong> {{ qr_data.user_email }}</p>
+                            <p><strong>Event Name:</strong> {{ qr_data.event_name }}</p>
+                            <p><strong>Event Date:</strong> {{ qr_data.event_date }}</p>
+                        </div>
+                        <h4 class="neon-subheading" data-aos="fade-up" data-aos-delay="300">
+                            <i class="fas fa-ticket-alt me-2"></i>Ticket Details
+                        </h4>
+                        <ul class="neon-list" data-aos="fade-up" data-aos-delay="400">
+                            {% for item in qr_data.ticket_details %}
+                                <li class="neon-list-item">
+                                    <strong>{{ item.ticket_type }}</strong> - Quantity: {{ item.quantity }}, Total: {{ item.total_price }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <p class="neon-total" data-aos="fade-up" data-aos-delay="500">
+                            <strong>Total Paid:</strong> {{ qr_data.total_price }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const glitchElements = document.querySelectorAll('.ticket-container .neon-glitch');
+    glitchElements.forEach(el => {
+        setInterval(() => {
+            el.style.textShadow = `2px 2px 5px #ff2e63, -2px -2px 5px #00ffcc`;
+            el.style.transform = `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`;
+            setTimeout(() => {
+                el.style.textShadow = `0 0 10px #ff2e63, 0 0 20px #00ffcc`;
+                el.style.transform = 'translate(0, 0)';
+            }, 150);
+        }, Math.random() * 2000 + 2000);
+    });
+});
+</script>
+{% endblock %}

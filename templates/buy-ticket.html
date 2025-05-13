@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ event.name }} | Vibe with Epic Moments{% endblock %}
+
+{% block extra_link %}
+  <link rel="stylesheet" href="{% static 'css/buy-ticket.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<section class="buy-ticket-page event-detail position-relative">
+  <div class="header-overlay"></div>
+  <div class=""></div>
+  <div class="container">
+    <div class="row">
+      <!-- Ticket Form and Event Info -->
+      <div class="col-md-10 offset-md-1">
+        {% if not is_past %}
+          <!-- Show Buy Ticket Form -->
+          <div class="holo-panel glass-panel" data-aos="fade-up">
+            <div class="panel-content">
+              <div class="row">
+                <!-- Ticket Information -->
+                <div class="col-md-6" data-aos="fade-right" data-aos-delay="100">
+                  <h1 class="glitch neon-glitch" data-text="Grab The Passes">Grab The Passes</h1>
+                  <h5 class="panel-title neon-subtitle">Tickets Information</h5>
+
+                 
+
+                  <!-- Total and Remaining Tickets -->
+                  <div class="ticket-info">
+                    <p><strong>Total Tickets:</strong> <span id="total-tickets">{{ total_tickets }}</span></p>
+                    <p><strong>Remaining Tickets:</strong> <span id="remaining-tickets-total">{{ remaining_tickets_total }}</span></p>
+                  </div>
+
+                  <h6 class="mt-4 neon-subtitle">Individual Ticket Remaining</h6>
+                  <ul class="ticket-list">
+                    {% for ticket in ticket_info %}
+                      <li class="ticket-item" data-ticket-id="{{ ticket.ticket.id }}">
+                        <span class="neon-bullet"></span>
+                        <strong>{{ ticket.ticket.name }}:</strong> <span class="remaining-tickets">{{ ticket.remaining_tickets }}</span> remaining
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                <!-- Event Details -->
+                <div class="col-md-6" data-aos="fade-left" data-aos-delay="200">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <h1 class="glitch neon-glitch event-name" data-text="{{ event.name }}">{{ event.name }}</h1>
+                    </div>
+                    <div class="row">
+                      <h5 class="panel-title neon-subtitle">Event Information</h5>
+                      <div class="col-md-12">
+                        <p class="info-text"><i class="fa-solid fa-calendar-days me-2"></i> Date: {{ event.date }}</p>
+                        <p class="info-text"><i class="fa-solid fa-clock me-2"></i> Time: {{ event.time }}</p>
+                        <p class="info-text"><i class="fa-solid fa-location-dot me-2"></i> Location: {{ event.location }}</p>
+                        <p class="info-text"><i class="fa-solid fa-user me-2"></i> Posted by: 
+                          <a href="{% url 'user-profile' event.created_by.username %}" class="info-link neon-link">{{ event.created_by.username }}</a>
+                        </p>
+                        <p class="info-text"><i class="fa-solid fa-clock me-2"></i> Posted on: {{ event.created_at|date:"F d, Y" }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Ticket Form -->
+              <form id="ticket-form" method="post" data-aos="fade-up" data-aos-delay="300">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="ticket-type" class="form-label info-label">Ticket Type</label>
+                  <select class="form-select neon-input" id="ticket-type" name="ticket_type" data-bs-toggle="tooltip" data-bs-placement="top" title="Select your ticket type">
+                    {% for ticket in event.tickets.all %}
+                      <option value="{{ ticket.id }}" data-price="{{ ticket.price }}">{{ ticket.name }} - PKR {{ ticket.price }}</option>
+                    {% empty %}
+                      <option disabled>No tickets available</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="quantity" class="form-label info-label">Quantity</label>
+                  <div class="quantity-control d-flex align-items-center">
+                    <button type="button" class="btn neon-button btn-sm quantity-decrement">-</button>
+                    <input type="number" class="form-control neon-input quantity-input" id="quantity" name="quantity" min="1" value="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Choose number of tickets">
+                    <button type="button" class="btn neon-button btn-sm quantity-increment">+</button>
+                  </div>
+                </div>
+                <p class="info-text neon-price">Total: PKR <span id="total-price">0.00</span></p>
+
+                <!-- Buttons -->
+                <button type="button" class="btn neon-button w-100 mb-2" id="preview-ticket-btn" data-bs-toggle="modal" data-bs-target="#ticketPreviewModal" data-bs-toggle="tooltip" data-bs-placement="top" title="Preview your ticket">Preview Ticket</button>
+                <button type="submit" class="btn neon-button w-100 mb-2" id="add-to-cart-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Add tickets to cart">Add to Cart</button>
+                <button type="submit" class="btn neon-button w-100" id="buy-now-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Purchase tickets now">Buy Now</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Ticket Preview Modal -->
+          <div class="modal fade" id="ticketPreviewModal" tabindex="-1" aria-labelledby="ticketPreviewModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content glass-modal">
+                <div class="modal-header">
+                  <h5 class="modal-title neon-subtitle" id="ticketPreviewModalLabel"><i class="fa-solid fa-ticket me-2"></i>Ticket Preview</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="ticket-preview glass-panel text-center">
+                    <h4 id="preview-event-name">{{ event.name }}</h4>
+                    <p><strong>Ticket Type:</strong> <span id="preview-ticket-type"></span></p>
+                    <p><strong>Quantity:</strong> <span id="preview-quantity"></span></p>
+                    <p><strong>Total:</strong> PKR <span id="preview-total"></span></p>
+                    <p class="small text-muted">This is a preview. Confirm by adding to cart or buying now.</p>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <!-- Past Event Notice -->
+          <div class="col-md-12 offset-md-12 text-center mt-5" data-aos="zoom-in">
+            <div class="holo-panel glass-panel">
+              <div class="panel-content">
+                <i class="fa-solid fa-calendar-times fa-5x neon-icon"></i>
+                <h1 class="text-muted neon-glitch" data-text="Event Ended">Event Ended</h1>
+                <p>This event has already passed. Ticket sales are now closed.</p>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialize AOS
+  AOS.init({ duration: 800, once: true });
+
+  // Initialize Tooltips
+  const tooltipTriggerList = document.querySelectorAll('.buy-ticket-page [data-bs-toggle="tooltip"]');
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+  // Enhanced Glitch Effect
+  const glitchElements = document.querySelectorAll('.buy-ticket-page .neon-glitch');
+  glitchElements.forEach(el => {
+    setInterval(() => {
+      el.style.textShadow = `2px 2px 5px #ff2e63, -2px -2px 5px #00ffcc`;
+      el.style.transform = `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`;
+      setTimeout(() => {
+        el.style.textShadow = `0 0 10px #ff2e63, 0 0 20px #00ffcc`;
+        el.style.transform = 'translate(0, 0)';
+      }, 150);
+    }, Math.random() * 2000 + 2000);
+  });
+
+  // Form Handling
+  const form = document.getElementById('ticket-form');
+  const addToCartBtn = document.getElementById('add-to-cart-btn');
+  const buyNowBtn = document.getElementById('buy-now-btn');
+  const ticketSelect = document.getElementById('ticket-type');
+  const quantityInput = document.getElementById('quantity');
+  const totalDisplay = document.getElementById('total-price');
+  const previewTicketBtn = document.getElementById('preview-ticket-btn');
+
+  // Quantity Controls
+  document.querySelector('.buy-ticket-page .quantity-increment').addEventListener('click', () => {
+    quantityInput.value = parseInt(quantityInput.value) + 1;
+    updateTotal();
+  });
+
+  document.querySelector('.buy-ticket-page .quantity-decrement').addEventListener('click', () => {
+    const newQuantity = Math.max(1, parseInt(quantityInput.value) - 1);
+    quantityInput.value = newQuantity;
+    updateTotal();
+  });
+
+  // Update Total Price
+  function updateTotal() {
+    const selectedOption = ticketSelect.options[ticketSelect.selectedIndex];
+    const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+    let quantity = parseInt(quantityInput.value) || 1;
+    if (quantity < 1) {
+      quantity = 1;
+      quantityInput.value = 1;
+    }
+    const total = price * quantity;
+    totalDisplay.textContent = total.toFixed(2);
+  }
+
+  ticketSelect.addEventListener('change', updateTotal);
+  quantityInput.addEventListener('input', updateTotal);
+  updateTotal();
+
+  // Form Action Handling
+  addToCartBtn.addEventListener('click', () => {
+    form.action = "{% url 'add-to-cart' event.id %}";
+  });
+
+  buyNowBtn.addEventListener('click', () => {
+    form.action = "{% url 'purchase-ticket' %}";
+  });
+
+  // Ticket Preview
+  previewTicketBtn.addEventListener('click', () => {
+    const selectedOption = ticketSelect.options[ticketSelect.selectedIndex];
+    const ticketName = selectedOption.text.split(' - ')[0];
+    const quantity = quantityInput.value;
+    const total = totalDisplay.textContent;
+    document.getElementById('preview-ticket-type').textContent = ticketName;
+    document.getElementById('preview-quantity').textContent = quantity;
+    document.getElementById('preview-total').textContent = total;
+  });
+
+ 
+});
+</script>
+{% endblock %}

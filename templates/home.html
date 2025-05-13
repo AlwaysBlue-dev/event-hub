@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}EventHub - Vibe with Epic Experiences{% endblock %}
+
+{% block extra_link %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section" data-aos="fade-up">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="neon-glow">Vibe with <span class="highlight">Epic</span> Moments</h1>
+            <p class="lead">Join a world of concerts, workshops, and festivals that spark joy!</p>
+            <div class="cta-container glass-cta">
+                <h2>Ready to Dive In?</h2>
+                <p>Explore unforgettable experiences waiting just for you.</p>
+                <a href="{% url 'events' %}" class="cta-button pulse"><i class="fas fa-bolt"></i> Start Exploring</a>
+            </div>
+            <div class="hero-stats" data-aos="fade-up" data-aos-delay="200">
+                <div class="stat-item">
+                    <div class="stat-number">10,000+</div>
+                    <div class="stat-label">Vibes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">500,000+</div>
+                    <div class="stat-label">Fans</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Cities</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section" data-aos="fade-up">
+    <div class="container">
+        <h2 class="section-title neon-underline">Pick Your Vibe</h2>
+        <div class="categories-grid">
+            <a href="{% url 'events' %}?category=Concerts" class="category-card glass-card" data-aos="zoom-in">
+                <div class="category-icon neon-icon"><i class="fas fa-music"></i></div>
+                <h3>Concerts</h3>
+                <p>Live music that hits different</p>
+            </a>
+            <a href="{% url 'events' %}?category=Technology" class="category-card glass-card" data-aos="zoom-in" data-aos-delay="100">
+                <div class="category-icon neon-icon"><i class="fas fa-laptop-code"></i></div>
+                <h3>Tech</h3>
+                <p>Geek out with innovation</p>
+            </a>
+            <a href="{% url 'events' %}?category=Food" class="category-card glass-card" data-aos="zoom-in" data-aos-delay="200">
+                <div class="category-icon neon-icon"><i class="fas fa-utensils"></i></div>
+                <h3>Food & Drink</h3>
+                <p>Taste global flavors</p>
+            </a>
+            <a href="{% url 'events' %}?category=Sports" class="category-card glass-card" data-aos="zoom-in" data-aos-delay="300">
+                <div class="category-icon neon-icon"><i class="fas fa-running"></i></div>
+                <h3>Sports</h3>
+                <p>Get your heart racing</p>
+            </a>
+            <a href="{% url 'events' %}?category=Education" class="category-card glass-card" data-aos="zoom-in" data-aos-delay="400">
+                <div class="category-icon neon-icon"><i class="fas fa-graduation-cap"></i></div>
+                <h3>Education</h3>
+                <p>Level up your skills</p>
+            </a>
+            <a href="{% url 'events' %}?category=Arts" class="category-card glass-card" data-aos="zoom-in" data-aos-delay="500">
+                <div class="category-icon neon-icon"><i class="fas fa-theater-masks"></i></div>
+                <h3>Arts</h3>
+                <p>Unleash your creativity</p>
+            </a>
+            <a href="{% url 'events' %}?category=Entertainment" class="category-card glass-card" data-aos="zoom-in" data-aos-delay="600">
+                <div class="category-icon neon-icon"><i class="fas fa-star"></i></div>
+                <h3>Entertainment</h3>
+                <p>Fun for every mood</p>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section glass-section" data-aos="fade-up">
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="neon-glow">Create Your Own Vibe!</h2>
+            <p>Host epic experiences with our supercharged platform.</p>
+            <a href="{% url 'create_event' %}" class="cta-button pulse">Launch Now <i class="fas fa-rocket"></i></a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials" data-aos="fade-up">
+    <div class="container">
+        <h2 class="section-title neon-underline">Vibes from the Crew</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card glass-card" data-aos="zoom-in">
+                <div class="testimonial-content">
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>"This platform is pure fire! Found my vibe in seconds!"</p>
+                </div>
+                <div class="testimonial-author">
+                    <img src="{% static 'images/user1.jpg' %}" alt="Ali Khan" class="author-image">
+                    <div class="author-info">
+                        <h4>Ali Khan</h4>
+                        <p>Vibe Chaser</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card glass-card" data-aos="zoom-in" data-aos-delay="100">
+                <div class="testimonial-content">
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>"Hosting my own events is a breeze. Total game-changer!"</p>
+                </div>
+                <div class="testimonial-author">
+                    <img src="{% static 'images/user2.jpg' %}" alt="Sara Ahmed" class="author-image">
+                    <div class="author-info">
+                        <h4>Sara Ahmed</h4>
+                        <p>Event Guru</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card glass-card" data-aos="zoom-in" data-aos-delay="200">
+                <div class="testimonial-content">
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <p>"The community here is unreal. Found my tribe!"</p>
+                </div>
+                <div class="testimonial-author">
+                    <img src="{% static 'images/user3.jpg' %}" alt="Usman Malik" class="author-image">
+                    <div class="author-info">
+                        <h4>Usman Malik</h4>
+                        <p>Community Star</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 800, once: true });
+</script>
+{% endblock %}

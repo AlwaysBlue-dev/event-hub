@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}QR Validation Failed - EventManager{% endblock %}
+
+{% block extra_link %}
+    <link rel="stylesheet" href="{% static 'css/qr_validation-failed.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+{% endblock %}
+
+{% block content %}
+<section class="qr-error-container">
+    <div class="container text-center">
+        <h2 class="neon-heading neon-glitch" data-text="QR Code Validation Failed" data-aos="zoom-in">
+            <i class="fas fa-times-circle neon-icon me-2"></i>QR Code Validation Failed
+        </h2>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="neon-card glass-panel" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-body">
+                        <p class="neon-error-text" data-aos="fade-up" data-aos-delay="200">{{ error }}</p>
+                        <a href="{% url 'validate-qr' %}" class="neon-button" data-aos="fade-up" data-aos-delay="300">
+                            <i class="fas fa-redo-alt me-2"></i>Try Again
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const glitchElements = document.querySelectorAll('.qr-error-container .neon-glitch');
+    glitchElements.forEach(el => {
+        setInterval(() => {
+            el.style.textShadow = `2px 2px 5px #ff2e63, -2px -2px 5px #00ffcc`;
+            el.style.transform = `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`;
+            setTimeout(() => {
+                el.style.textShadow = `0 0 10px #ff2e63, 0 0 20px #00ffcc`;
+                el.style.transform = 'translate(0, 0)';
+            }, 150);
+        }, Math.random() * 2000 + 2000);
+    });
+});
+</script>
+{% endblock %}

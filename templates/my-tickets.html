@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Orders - Vibe with Epic Moments{% endblock %}
+
+{% block extra_link %}
+    <link rel="stylesheet" href="{% static 'css/my-ticket.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="orders-container">
+    <div class="row g-0">
+        <!-- Sidebar -->
+            {% include 'partials/sidebar.html' %}
+       
+
+        <!-- Main Content -->
+        <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4 main-content">
+            <h2 class="page-title neon-glitch mb-4 fw-bold mt-4" data-aos="zoom-in">
+                <i class="fas fa-box-open me-2"></i>My Orders
+            </h2>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar glass-section mb-4" data-aos="fade-down">
+                <label for="status-filter" class="form-label me-2">Filter by Status:</label>
+                <select id="status-filter" class="form-control neon-input">
+                    <option value="all">All</option>
+                    <option value="completed">Completed</option>
+                    <option value="pending">Pending</option>
+                </select>
+            </div>
+
+            {% if page_obj %}
+            <div class="row">
+                {% for order in page_obj.object_list %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card order-card glass-card h-100" data-aos="fade-up" data-status="{{ order.payment_status }}">
+                        {% if order.event.image %}
+                            <img src="{{ order.event.image.url }}" class="card-img-top order-image" alt="{{ order.event.name }}">
+                        {% else %}
+                            <img src="{% static 'images/demo.jpg' %}" class="card-img-top order-image" alt="Default Image">
+                        {% endif %}
+
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title d-flex justify-content-between align-items-center mb-3">
+                                {{ order.event.name }}
+                                <span class="badge neon-badge 
+                                    {% if order.payment_status == 'completed' %}
+                                        bg-success
+                                    {% else %}
+                                        bg-warning text-dark
+                                    {% endif %}">
+                                    {{ order.payment_status|title }}
+                                </span>
+                            </h5>
+
+                            <ul class="list-unstyled small-text mb-3">
+                                <li class="d-flex align-items-center">
+                                    <strong>Order #:</strong> 
+                                    <span class="ms-1">{{ order.id }}</span>
+                                    <button class="btn btn-sm neon-button copy-btn ms-2" data-clipboard-text="{{ order.id }}" title="Copy Order ID">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </li>
+                                <li><strong>Date:</strong> {{ order.event.date }}</li>
+                                <li><strong>Time:</strong> {{ order.event.time }}</li>
+                                <li><strong>Location:</strong> {{ order.event.location }}</li>
+                                {% if order.event.map_link %}
+                                    <li><strong>Map:</strong> 
+                                        <a href="{{ order.event.map_link }}" target="_blank" class="map-link neon-link">View</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+
+                            <p class="fw-semibold mb-4">
+                                Total: <span class="text-primary neon-text">PKR {{ order.total_price }}</span>
+                            </p>
+
+                            {% if order.qr_code %}
+                            <div class="qr-section mt-4 text-center">
+                                <h6 class="mb-2 neon-subtitle">Entry QR Code</h6>
+                                <a href="{{ order.qr_code }}" target="_blank" class="qr-link">
+                                    <img src="{{ order.qr_code }}" alt="QR Code" class="img-fluid qr-image neon-qr" />
+                                </a>
+                                <a href="{{ order.qr_code }}" download="order_{{ order.id }}_qr.png" class="btn btn-outline-secondary btn-sm neon-button mt-2">
+                                    <i class="fas fa-download me-2"></i>Download
+                                </a>
+                            </div>
+                            {% else %}
+                            <div class="text-danger text-center mt-4">
+                                <small>
+                                    QR Code is not available at the moment. 
+                                    You can still enter using your order details. 
+                                    <br>
+                                    For assistance, please <a href="{% url 'contact-support' %}" class="text-decoration-underline neon-link">contact support</a>.
+                                </small>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="mt-auto p-3">
+                            <a href="{% url 'event-detail' event_id=order.event_id %}" class="btn btn-primary w-100 neon-button pulse">
+                                <i class="fas fa-receipt me-2"></i>View Event Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Order pagination" class="mt-4">
+                <ul class="pagination justify-content-center neon-pagination">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link neon-page-link" href="?page={{ page_obj.previous_page_number }}">«</a>
+                    </li>
+                    {% endif %}
+                    {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                        <a class="page-link neon-page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link neon-page-link" href="?page={{ page_obj.next_page_number }}">»</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+            {% else %}
+            <div class="alert alert-info text-center glass-section neon-alert" data-aos="fade-up">
+                No orders yet. <a href="{% url 'events' %}" class="alert-link neon-link">Browse events</a> to book now!
+            </div>
+            {% endif %}
+        </main>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize AOS
+    AOS.init({ duration: 800, once: true });
+
+    // Glitch Effect for Title
+    const glitchElements = document.querySelectorAll('.neon-glitch');
+    glitchElements.forEach(el => {
+        setInterval(() => {
+            el.style.textShadow = `2px 2px 5px #ff2e63, -2px -2px 5px #00ffcc`;
+            el.style.transform = `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`;
+            setTimeout(() => {
+                el.style.textShadow = `0 0 10px #ff2e63, 0 0 20px #00ffcc`;
+                el.style.transform = 'translate(0, 0)';
+            }, 150);
+        }, 2500);
+    });
+
+    // Copy to Clipboard
+    const clipboard = new ClipboardJS('.copy-btn');
+    clipboard.on('success', function(e) {
+        const btn = e.trigger;
+        btn.innerHTML = '<i class="fas fa-check"></i>';
+        setTimeout(() => {
+            btn.innerHTML = '<i class="fas fa-copy"></i>';
+        }, 2000);
+        e.clearSelection();
+    });
+
+    // Filter Orders
+    const filterSelect = document.getElementById('status-filter');
+    const orderCards = document.querySelectorAll('.order-card');
+
+    filterSelect.addEventListener('change', function() {
+        const selectedStatus = this.value;
+        orderCards.forEach(card => {
+            const cardStatus = card.getAttribute('data-status');
+            if (selectedStatus === 'all' || cardStatus === selectedStatus) {
+                card.closest('.col-md-6').style.display = 'block';
+            } else {
+                card.closest('.col-md-6').style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

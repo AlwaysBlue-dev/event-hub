@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+{% load custom_tags %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Purchase Confirmation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-top: 20px;
+        }
+        p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #ecf0f1;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        li strong {
+            color: #2c3e50;
+        }
+        .total-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-top: 20px;
+        }
+        .qr-code {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .qr-code img {
+            max-width: 200px;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .qr-code p {
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #2c3e50;
+            color: white;
+            font-size: 0.9rem;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Ticket Purchase Confirmation</h1>
+    </header>
+
+    <div class="container">
+        <h2>Event Details</h2>
+        <p><strong>Event Name:</strong> {{ event.name }}</p>
+        <p><strong>Date:</strong> {{ event.date }}</p>
+        <p><strong>Time:</strong> {{ event.time }}</p>
+        <p><strong>Location:</strong> {{ event.location }}</p>
+        <p><strong>Google Map:</strong> {{ event.map_link }}</p>
+
+        <h2>Order Details</h2>
+            <ul>
+                {% for item in order_items %}
+                <li>
+                    <strong>Order Number:</strong> #{{ order_number }}<br>  
+                    <strong>Ticket Type:</strong> {{ item.ticket_type.name }}<br>
+                    <strong>Quantity:</strong> {{ item.quantity }}<br>
+                    <strong>Price Per Ticket:</strong> {{ item.item_price }}<br>
+                    <strong>Total Price for Item:</strong> PKR {{ item.quantity|multiply:item.item_price }}
+                </li>
+                {% endfor %}
+            </ul>
+
+        <p class="total-price"><strong>Total Price:</strong> PKR {{ total_price }}</p>
+
+        <div class="qr-code">
+            <h3>Your QR Code for Event Entry:</h3>
+            <p>If the QR code image doesn't appear, please click on the image below to view it directly.</p>
+            <a href="{{ qr_code_url }}" target="_blank">
+                <img src="{{ qr_code_url }}" alt="QR Code" />
+            </a>
+        </div>
+
+        <p>Thank you for purchasing your ticket with us!</p>
+        <p>If you have any questions, feel free to contact our support team.</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 PrimeWebDigitals. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

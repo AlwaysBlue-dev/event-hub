@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block title %}Events - Vibe with Epic Moments{% endblock %}
+
+{% block extra_link %}
+    <link rel="stylesheet" href="{% static 'css/events.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<section class="events-section py-5" data-aos="fade-up">
+    <div class="container">
+        <h2 class="text-center mb-5 neon-glitch" data-text="Events">Events</h2>
+
+        <!-- Filter Form -->
+        <form method="get" class="filter-form mb-5 p-4 rounded glass-form" id="filterForm" data-aos="fade-up" data-aos-delay="100">
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <select name="type" class="form-select neon-input" onchange="this.form.submit()">
+                        <option value="">All Types</option>
+                        <option value="free" {% if request.GET.type == 'free' %}selected{% endif %}>Free Events</option>
+                        <option value="paid" {% if request.GET.type == 'paid' %}selected{% endif %}>Paid Events</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="location" class="form-select neon-input" onchange="this.form.submit()">
+                        <option value="">All Locations</option>
+                        {% for location in locations %}
+                            <option value="{{ location }}" {% if request.GET.location == location %}selected{% endif %}>{{ location }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="sort_by" class="form-select neon-input" onchange="this.form.submit()">
+                        <option value="">Sort By</option>
+                        {% if request.GET.show == 'past' %}
+                            <option value="most_remaining" {% if request.GET.sort_by == 'most_remaining' %}selected{% endif %}>Most Days Ago</option>
+                            <option value="least_remaining" {% if request.GET.sort_by == 'least_remaining' or not request.GET.sort_by %}selected{% endif %}>Most Recently Past</option>
+                        {% else %}
+                            <option value="most_remaining" {% if request.GET.sort_by == 'most_remaining' %}selected{% endif %}>Most Days Remaining</option>
+                            <option value="least_remaining" {% if request.GET.sort_by == 'least_remaining' or not request.GET.sort_by %}selected{% endif %}>Least Days Remaining</option>
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="category" class="form-select neon-input" onchange="this.form.submit()">
+                        <option value="">All Categories</option>
+                        {% for key, label in category_choices %}
+                            <option value="{{ key }}" {% if request.GET.category == key %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <input type="text" name="search" class="form-control search-input neon-input" placeholder="Search events..." value="{{ request.GET.search }}">
+                </div>
+            </div>
+            <input type="hidden" name="show" value="{{ request.GET.show }}">
+        </form>
+
+        <!-- Event Tabs -->
+        <div class="mb-4 text-center" data-aos="fade-up" data-aos-delay="200">
+            <ul class="nav nav-pills justify-content-center glass-tabs">
+                <li class="nav-item">
+                    <a class="nav-link {% if not request.GET.show %}active neon-tab{% else %}text-light{% endif %}" 
+                       href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.type %}type={{ request.GET.type }}&{% endif %}{% if request.GET.location %}location={{ request.GET.location }}&{% endif %}{% if request.GET.sort_by %}sort_by={{ request.GET.sort_by }}&{% endif %}show=">Upcoming</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.GET.show == 'past' %}active neon-tab{% else %}text-light{% endif %}" 
+                       href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.type %}type={{ request.GET.type }}&{% endif %}{% if request.GET.location %}location={{ event.location }}&{% endif %}{% if request.GET.sort_by %}sort_by={{ request.GET.sort_by }}&{% endif %}show=past">Past</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Events Display Section -->
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 g-4">
+            {% for event in events %}
+            <div class="col" data-aos="zoom-in" data-aos-delay="{% cycle '0' '100' '200' '300' %}">
+                <div class="card event-card h-100 glass-card neon-card">
+                    {% if event.image %}
+                        <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.name }}" loading="lazy">
+                    {% else %}
+                        <img src="{% static 'images/demo.jpg' %}" class="card-img-top" alt="Default Event Image" loading="lazy">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-truncate neon-title" title="{{ event.name }}">{{ event.name }}</h5>
+                        <p class="card-text small"><i class="fa-solid fa-calendar-days me-2"></i>{{ event.date }} | {{ event.time }}</p>
+                        <p class="card-text small"><i class="fa-solid fa-location-dot me-2"></i>Area: {{ event.location }}</p>
+                        <p class="card-text small"><i class="fa-solid fa-map-marker-alt me-2"></i>{{ event.city }}, {{ event.country }}</p>
+                        <h6 class="neon-subtitle">Highlights</h6>
+                        {% if event.faces.all %}
+                        <div class="event-faces mb-2">
+                            {% for face in event.faces.all|slice:":3" %}
+                                <img src="{{ face.image.url }}" class="rounded-circle face-img neon-face" alt="Guest Face">
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% if event.highlights.all %}
+                        <ul class="list-unstyled highlights mb-2">
+                            {% for h in event.highlights.all %}
+                                <li><i class="fa-solid fa-check me-1 text-success"></i>{{ h.text }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        <h6 class="neon-subtitle">Tickets</h6>
+                        {% for ticket in event.ticket_info %}
+                            {% if event.is_past %}
+                                <p class="small"><strong>{{ ticket.name }}</strong></p>
+                            {% else %}
+                                <p class="small">
+                                    <strong>{{ ticket.name }}</strong>: 
+                                    {{ ticket.remaining_quantity }} / {{ ticket.total_quantity }} remaining
+                                </p>
+                            {% endif %}
+                        {% endfor %}
+                        <small class="d-block mb-1">Capacity: {% if event.capacity == 0 %}Unlimited{% else %}{{ event.capacity }}{% endif %}</small>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge neon-badge {% if event.is_free %}bg-success{% else %}bg-danger{% endif %}">
+                                {% if event.is_free %}Free Event{% else %}Paid Event{% endif %}
+                            </span>
+                            <span class="badge neon-badge bg-dark">
+                                {{ event.remaining_days }}
+                            </span>
+                        </div>
+                        <p class="small mb-2">Posted by <a href="{% url 'user-profile' event.created_by.username %}" class="text-decoration-none neon-link">{{ event.created_by.username }}</a></p>
+                        <div class="d-flex gap-2 mt-auto button-container">
+                            <a href="{% url 'event-detail' event.id %}" class="btn neon-button w-50 clickable">Show More Details</a>
+                            <a href="{% url 'buy-ticket' event.id %}" class="btn neon-button pulse w-50 clickable">Get Tickets Now</a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            {% empty %}
+                <p class="m-auto mt-5 text-center neon-text">No vibes at the moment. Stay tuned!</p>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-between mt-4" data-aos="fade-up" data-aos-delay="300">
+            <div>
+                <span class="badge neon-badge bg-dark">Page {{ events.number }} of {{ events.paginator.num_pages }}</span>
+            </div>
+            <div>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination glass-pagination">
+                        {% if events.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link neon-page" href="{% querystring page=events.previous_page_number %}" aria-label="Previous">«</a>
+                        </li>
+                        {% endif %}
+                        {% for i in events.paginator.page_range %}
+                        <li class="page-item {% if events.number == i %}active{% endif %}">
+                            <a class="page-link neon-page" href="{% querystring page=i %}">{{ i }}</a>
+                        </li>
+                        {% endfor %}
+                        {% if events.has_next %}
+                        <li class="page-item">
+                            <a class="page-link neon-page" href="{% querystring page=events.next_page_number %}" aria-label="Next">»</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+    // Initialize AOS
+    AOS.init({ duration: 800, once: true });
+
+    // Enhanced Glitch Effect
+    document.addEventListener('DOMContentLoaded', () => {
+        const glitchElements = document.querySelectorAll('.neon-glitch');
+        glitchElements.forEach(el => {
+            setInterval(() => {
+                el.style.textShadow = `2px 2px 5px #ff2e63, -2px -2px 5px #00ffcc`;
+                el.style.transform = `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`;
+                setTimeout(() => {
+                    el.style.textShadow = `0 0 10px #ff2e63, 0 0 20px #00ffcc`;
+                    el.style.transform = 'translate(0, 0)';
+                }, 150);
+            }, 2500);
+        });
+
+        // Ensure buttons are clickable
+        document.querySelectorAll('.clickable').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent parent event interference
+                window.location.href = btn.href; // Ensure navigation
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,363 @@
+/* CSS specific to the User Profile page, scoped to .user-profile-page */
+.user-profile-page {
+    --primary-color: #ff2e63; /* Neon Pink */
+    --secondary-color: #00ffcc; /* Neon Cyan */
+    --dark-color: #1a1a2e; /* Dark Navy */
+    --text-color: #b0b0cc; /* Light Gray */
+    --white: #ffffff;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    --transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --neon-glow: 0 0 10px #ff2e63, 0 0 20px #ff2e63, 0 0 30px #ff2e63;
+  
+    background: linear-gradient(135deg, var(--dark-color), #16213e);
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color);
+    position: relative;
+  }
+  
+  .user-profile-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://grainy-gradients.vercel.app/noise.svg');
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  /* Profile Header */
+  .user-profile-page .profile-header {
+    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+    padding: 4rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* .user-profile-page .profile-header .header-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+  } */
+  
+  .user-profile-page .profile-header .retro-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%2300ffcc" fill-opacity="0.8" d="M0,160L48,186.7C96,213,192,267,288,261.3C384,256,480,192,576,170.7C672,149,768,171,864,192C960,213,1056,235,1152,213.3C1248,192,1344,128,1392,96L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+    background-size: cover;
+    animation: wave 10s linear infinite;
+  }
+  
+  @keyframes wave {
+    0% { background-position-x: 0; }
+    100% { background-position-x: 1440px; }
+  }
+  
+  .user-profile-page .profile-header .avatar-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .user-profile-page .profile-header .profile-avatar {
+    width: 150px;
+    height: 150px;
+    border: 4px solid var(--secondary-color);
+    box-shadow: 0 0 20px var(--secondary-color);
+    transition: var(--transition);
+  }
+  
+  .user-profile-page .profile-header .profile-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px var(--secondary-color);
+  }
+  
+  .user-profile-page .profile-header .profile-name.neon-glitch {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    color: var(--white);
+    text-shadow: var(--neon-glow);
+  }
+  
+  .user-profile-page .profile-header .username-badge.neon-badge {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    display: inline-block;
+    animation: badgePulse 2s infinite;
+  }
+  
+  @keyframes badgePulse {
+    0% { box-shadow: 0 0 5px var(--secondary-color); }
+    50% { box-shadow: 0 0 15px var(--secondary-color); }
+    100% { box-shadow: 0 0 5px var(--secondary-color); }
+  }
+  
+  .user-profile-page .profile-header .progress-container {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .user-profile-page .profile-header .progress.neon-progress {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--secondary-color);
+    border-radius: 8px;
+    height: 10px;
+  }
+  
+  .user-profile-page .profile-header .progress-bar {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    transition: width 1s ease-in-out;
+  }
+  
+  .user-profile-page .profile-header .text-muted {
+    color: var(--text-color) !important;
+  }
+  
+  /* Profile Info Section */
+  .user-profile-page .profile-info {
+    background: transparent;
+  }
+  
+  .user-profile-page .holo-panel.glass-panel {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: var(--transition);
+  }
+  
+  .user-profile-page .holo-panel.glass-panel:hover {
+    transform: rotate(0deg) scale(1.05);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 20px var(--secondary-color);
+  }
+  
+  .user-profile-page .panel-title.neon-subtitle {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    color: var(--white);
+    text-shadow: 0 0 5px var(--secondary-color);
+    margin-bottom: 1rem;
+  }
+  
+  .user-profile-page .panel-content p {
+    margin-bottom: 0.75rem;
+    color: var(--text-color);
+  }
+  
+  .user-profile-page .panel-content .info-label {
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin-right: 0.5rem;
+  }
+  
+  .user-profile-page .panel-content .avatar-current img,
+  .user-profile-page .panel-content .avatar-previous img {
+    border: 2px solid var(--secondary-color);
+    box-shadow: 0 0 10px var(--secondary-color);
+    transition: var(--transition);
+  }
+  
+  .user-profile-page .panel-content .avatar-previous img:hover {
+    transform: scale(1.1);
+  }
+  
+  .user-profile-page .panel-content .social-links .social-icon {
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    margin: 0 0.75rem;
+    transition: var(--transition);
+  }
+  
+  .user-profile-page .panel-content .social-links .social-icon:hover {
+    color: var(--primary-color);
+    transform: scale(1.2);
+    text-shadow: 0 0 10px var(--primary-color);
+  }
+  
+  .user-profile-page .panel-content .text-muted {
+    color: var(--text-color) !important;
+  }
+  
+  /* Buttons */
+  .user-profile-page .btn.neon-button {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: var(--white);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: none;
+    box-shadow: var(--neon-glow);
+    transition: var(--transition);
+  }
+  
+  .user-profile-page .btn.neon-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  .user-profile-page .btn.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--secondary-color);
+    color: var(--white);
+  }
+  
+  /* Modals */
+  .user-profile-page .modal-content.glass-modal {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    color: var(--white);
+  }
+  
+  .user-profile-page .modal-header {
+    border-bottom: 2px solid var(--secondary-color);
+  }
+  
+  .user-profile-page .modal-header .btn-close-white {
+    filter: invert(1);
+  }
+  
+  .user-profile-page .modal-body .form-label {
+    color: var(--text-color);
+  }
+  
+  .user-profile-page .modal-body .form-control.neon-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--secondary-color);
+    color: var(--white);
+    border-radius: 8px;
+  }
+  
+  .user-profile-page .modal-body .form-control.neon-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color);
+  }
+  
+  .user-profile-page .modal-body .avatar-preview img {
+    border: 2px solid var(--secondary-color);
+    box-shadow: 0 0 10px var(--secondary-color);
+  }
+  
+  /* Previous Avatars Modal */
+  .user-profile-page #viewPreviousAvatarsModal .search-box .input-group {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+  }
+  
+  .user-profile-page #viewPreviousAvatarsModal .search-box .form-control.neon-input {
+    background: transparent;
+    border: none;
+    color: var(--white);
+  }
+  
+  .user-profile-page #viewPreviousAvatarsModal .search-box .form-control.neon-input:focus {
+    box-shadow: none;
+    color: var(--white);
+  }
+  
+  .user-profile-page #viewPreviousAvatarsModal .search-box .input-group-text {
+    background: transparent;
+    border: none;
+    color: var(--secondary-color);
+  }
+  
+  .user-profile-page #viewPreviousAvatarsModal .search-box .clear-search {
+    cursor: pointer;
+  }
+  
+  .user-profile-page #viewPreviousAvatarsModal .avatar-item img {
+    border: 2px solid var(--secondary-color);
+    box-shadow: 0 0 10px var(--secondary-color);
+    transition: var(--transition);
+  }
+  
+  .user-profile-page #viewPreviousAvatarsModal .avatar-item img:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Pagination */
+  .user-profile-page .neon-pagination .neon-page-link {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--secondary-color);
+    color: var(--white);
+    margin: 0 0.2rem;
+    border-radius: 8px;
+    transition: var(--transition);
+  }
+  
+  .user-profile-page .neon-pagination .page-item.active .neon-page-link {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border-color: var(--secondary-color);
+    color: var(--white);
+  }
+  
+  .user-profile-page .neon-pagination .neon-page-link:hover {
+    background: var(--secondary-color);
+    color: var(--dark-color);
+    box-shadow: 0 0 10px var(--secondary-color);
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .user-profile-page .profile-header {
+      padding: 3rem 0;
+    }
+    .user-profile-page .profile-header .profile-name.neon-glitch {
+      font-size: 2rem;
+    }
+    .user-profile-page .holo-panel.glass-panel {
+      transform: rotate(0deg);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .user-profile-page .profile-header .profile-avatar {
+      width: 120px;
+      height: 120px;
+    }
+    .user-profile-page .profile-header .username-badge.neon-badge {
+      font-size: 1rem;
+    }
+    .user-profile-page .panel-title.neon-subtitle {
+      font-size: 1.3rem;
+    }
+    .user-profile-page .panel-content .avatar-current img {
+      width: 80px;
+      height: 80px;
+    }
+    .user-profile-page .panel-content .avatar-previous img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .user-profile-page .profile-header .profile-name.neon-glitch {
+      font-size: 1.8rem;
+    }
+    .user-profile-page .btn.neon-button {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.9rem;
+    }
+    .user-profile-page #viewPreviousAvatarsModal .avatar-item img {
+      width: 60px;
+      height: 60px;
+    }
+  }
