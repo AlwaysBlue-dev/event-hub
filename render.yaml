@@ -1,18 +1,10 @@
-# render.yaml
-
 services:
   - type: web
     name: EventsHub
     plan: free
-    dockerfilePath: ./DockerFile  # Ensure correct casing: "Dockerfile"
+    dockerfilePath: ./DockerFile
     envVars:
       - key: DEBUG
         value: "False"
       - key: SECRET_KEY
         generateValue: true
-      - key: DJANGO_SUPERUSER_USERNAME
-        value: admin
-      - key: DJANGO_SUPERUSER_EMAIL
-        value: admin@example.com
-      - key: DJANGO_SUPERUSER_PASSWORD
-        value: adminpass123

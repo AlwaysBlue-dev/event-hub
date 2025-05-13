@@ -13,19 +13,20 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy project
+# Copy project files
 COPY . .
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 
-# Superuser creation script using environment variables
-COPY create_superuser.py /MainApp/create_superuser.py
-
-# Collect static files, run migrations, create superuser during build
+# Collect static files and run DB migrations
 RUN python manage.py collectstatic --noinput && \
     python manage.py migrate && \
-    python create_superuser.py
+    echo "from django.contrib.auth import get_user_model; \
+          User = get_user_model(); \
+          User.objects.filter(username='admin').exists() or \
+          User.objects.create_superuser('admin', 'admin@example.com', 'adminpass123')" \
+          | python manage.py shell
 
-# Start app
+# Start Gunicorn server
 CMD gunicorn EventsHub.wsgi:application --bind 0.0.0.0:8000
