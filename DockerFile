@@ -10,23 +10,20 @@ RUN apt-get update && apt-get install -y \
 # Set work directory
 WORKDIR /app
 
-# Copy requirements first and install Python dependencies
-COPY requirements.txt . 
+# Install dependencies
+COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy the whole project
+# Copy project
 COPY . .
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 
-# Superuser creation script using environment variables
-COPY create_superuser.py /MainApp/create_superuser.py
-
-# Run Django commands: collect static, migrate, create superuser, start server
-CMD bash -c "
-    python manage.py collectstatic --noinput && \
+# Collect static files, run migrations, create superuser during build
+RUN python manage.py collectstatic --noinput && \
     python manage.py migrate && \
-    python create_superuser.py && \
-    gunicorn EventsHub.wsgi:application --bind 0.0.0.0:8000
-"
+    python create_superuser.py
+
+# Start app
+CMD gunicorn EventsHub.wsgi:application --bind 0.0.0.0:8000
