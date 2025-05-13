@@ -1,5 +1,3 @@
-# Dockerfile
-
 # Use official Python base image
 FROM python:3.11-slim
 
@@ -8,7 +6,8 @@ RUN apt-get update && apt-get install -y \
     libzbar0 \
     build-essential \
     libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && ldconfig -p | grep zbar  # Check if zbar is installed correctly
 
 # Set work directory
 WORKDIR /app
@@ -17,12 +16,14 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
+# Explicitly install pyzbar
+RUN pip install pyzbar
+
 # Copy the whole project
 COPY . .
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
-
 
 # Superuser creation script using environment variables
 COPY create_superuser.py /MainApp/create_superuser.py
