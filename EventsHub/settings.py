@@ -18,9 +18,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
 
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-if os.environ.get('RENDER'):
-    ALLOWED_HOSTS.append('https://eventshub-mo8n.onrender.com')
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','eventshub-mo8n.onrender.com','http://eventshub-mo8n.onrender.com/']
 
     
 # Application definition
