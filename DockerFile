@@ -1,23 +1,18 @@
 # Use official Python base image
 FROM python:3.11-slim
 
-# Install required system packages, including zbar
+# Install required system packages
 RUN apt-get update && apt-get install -y \
-    libzbar0 \
     build-essential \
     libpq-dev \
-    && rm -rf /var/lib/apt/lists/* \
-    && ldconfig -p | grep zbar  # Check if zbar is installed correctly
+    && rm -rf /var/lib/apt/lists/*
 
 # Set work directory
 WORKDIR /app
 
 # Copy requirements first and install Python dependencies
-COPY requirements.txt .
+COPY requirements.txt . 
 RUN pip install --upgrade pip && pip install -r requirements.txt
-
-# Explicitly install pyzbar
-RUN pip install pyzbar
 
 # Copy the whole project
 COPY . .

@@ -25,7 +25,8 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.contrib.sites.shortcuts import get_current_site
 import json
-from pyzbar.pyzbar import decode
+import cv2
+import numpy as np
 from PIL import Image
 from datetime import timedelta
 from django.db.models.functions import TruncDate
@@ -1367,9 +1368,17 @@ def validate_qr(request):
         if request.FILES.get('qr_image'):
             # Uploaded QR Image
             image = Image.open(request.FILES['qr_image'])
-            decoded_data = decode(image)
-            if decoded_data:
-                qr_data_str = decoded_data[0].data.decode('utf-8')
+            # Convert PIL image to numpy array for OpenCV
+            image_np = np.array(image)
+            # Convert RGB to BGR (OpenCV uses BGR format)
+            image_bgr = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
+
+            # Decode the QR code using OpenCV
+            detector = cv2.QRCodeDetector()
+            retval, decoded_data, points, straight_qrcode = detector(image_bgr)
+
+            if retval:
+                qr_data_str = decoded_data
             else:
                 return render(request, 'qr_validation_failed.html', {'error': 'No QR code detected'})
         else:
@@ -1404,6 +1413,7 @@ def validate_qr(request):
             return render(request, 'qr_validation_failed.html', {'error': 'Invalid QR code format'})
 
     return render(request, 'validate_qr.html')
+
 def event_sales(request):
     # Default time range is "All Time"
     time_range = request.GET.get('time_range', 'all')
