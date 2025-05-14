@@ -1,32 +1,40 @@
-# Use official Python base image
+# Use official Python slim base
 FROM python:3.11-slim
 
-# Install required system packages
+# Install system dependencies for pyzbar and Pillow
 RUN apt-get update && apt-get install -y \
     build-essential \
+    libzbar0 \
+    libjpeg-dev \
+    zlib1g-dev \
+    libmagic1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Set work directory
+# Set working directory
 WORKDIR /app
 
-# Install dependencies
+# Copy and install dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy project files
+# Copy project code
 COPY . .
 
-# Set environment variables
+# Collect static files (noinput)
+RUN python manage.py collectstatic --noinput
+
+# Run migrations
+RUN python manage.py migrate
+
+# OPTIONAL: Create superuser via environment variables
+# You can skip if you don’t want to auto-create superuser
+# RUN python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='admin').exists() or User.objects.create_superuser('admin', 'admin@example.com', 'adminpass123')"
+
+# Set environment
 ENV PYTHONUNBUFFERED=1
 
-# Collect static files and run DB migrations
-RUN python manage.py collectstatic --noinput && \
-    python manage.py migrate && \
-    echo "from django.contrib.auth import get_user_model; \
-          User = get_user_model(); \
-          User.objects.filter(username='admin').exists() or \
-          User.objects.create_superuser('admin', 'admin@example.com', 'adminpass123')" \
-          | python manage.py shell
+# Expose port
+EXPOSE 8000
 
 # Start Gunicorn server
 CMD gunicorn EventsHub.wsgi:application --bind 0.0.0.0:8000
