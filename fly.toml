@@ -1,37 +1,28 @@
-# This is the name of your app on Fly.io
 app = "event-hub-yorlsg"
 
-# Fly.io will use this to determine the Docker image to deploy
-# If you're using a Dockerfile to build your app, this section will define it
 [build]
   dockerfile = "Dockerfile"
 
-# Define regions where your app will be deployed
 [env]
-  FLY_REGION = "sin"  # Change this to your preferred region (e.g., "nyc", "lhr", etc.)
-  SECRET_KEY = "django-insecure-!albcnc1@u-)emu&6xgtsoi12xl97u93kuc+7-wu5txubd1b*^"  # Example of a secret key for your app
-  DJANGO_SETTINGS_MODULE = "EventsHub.settings"  # Update with your actual Django project settings module
+  FLY_REGION = "sin"
+  SECRET_KEY = "your-django-secret-key"  # Set this to a secure key in production
 
-# Volumes or mounts you may want to set up
 [[mounts]]
   source = "data"
-  destination = "/data"  # Adjust based on your app's needs (e.g., file storage, media)
+  destination = "/data"
 
-# Enable HTTP routing for your app and set the entry point
 [[services]]
-  internal_port = 8000  # Port where your app is running (adjust if needed)
-  
+  internal_port = 8000  # Port where your app will run
+
   [services.http_checks]
     interval = 10000
     grace_period = "5s"
     method = "GET"
-    path = "/health"  # Define health check path
+    path = "/health"
 
-# Optionally, configure scaling (number of instances, etc.)
 [scale]
-  vm_size = "shared-cpu-1x"  # Adjust as per your app's requirements
-  count = 1  # Number of app instances
+  vm_size = "shared-cpu-1x"
+  count = 1  # Number of instances
 
-# Set up logging, for example, to log output from your app
 [[logging]]
   type = "stdout"
