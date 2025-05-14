@@ -1,0 +1,48 @@
+# This is the name of your app on Fly.io
+app = "event-hub-yorlsg"
+
+# Fly.io will use this to determine the Docker image to deploy
+# If you're using a Dockerfile to build your app, this section will define it
+[build]
+  # Using the Dockerfile to build the app
+  dockerfile = "DockerFile"
+
+# Optionally, specify the image you want to deploy if you're not using a Dockerfile
+# image = "your-image-name"
+
+# Define regions where your app will be deployed
+# You can specify multiple regions
+[env]
+  FLY_REGION = "ams"  # Change this to your preferred region (e.g., "nyc", "lhr", etc.)
+
+# Here you can define environment variables for your app (e.g., DB connection strings)
+[env]
+  # DATABASE_URL = "your-database-url"  # Replace with your actual DB URL
+  SECRET_KEY = "django-insecure-!albcnc1@u-)emu&6xgtsoi12xl97u93kuc+7-wu5txubd1b*^"  # Example of a secret key for your app
+
+# Volumes or mounts you may want to set up
+[[mounts]]
+  source = "data"
+  destination = "/data"  # Adjust based on your app's needs (e.g., file storage, etc.)
+
+# Enable HTTP routing for your app and set the entry point
+[[services]]
+  internal_port = 8000  # Port where your app is running (adjust if needed)
+
+  # Optional: You can configure this if your app needs a load balancer
+  [services.http_checks]
+    interval = 10000
+    grace_period = "5s"
+    method = "GET"
+    path = "/health"
+
+# Optionally, configure scaling (number of instances, etc.)
+[scale]
+  # Define how many instances of your app you want running
+  # This is just an example, and you can adjust as needed
+  vm_size = "shared-cpu-1x"  # Adjust as per your app's requirements
+  count = 1  # Number of app instances
+
+# Set up logging, for example, to log output from your app
+[[logging]]
+  type = "stdout"
