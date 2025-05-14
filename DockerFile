@@ -1,7 +1,7 @@
 # Base image with Python
 FROM python:3.11-slim
 
-# Install zbar and build tools
+# Install system dependencies (e.g., for image handling or other tools)
 RUN apt-get update && apt-get install -y \
     libzbar0 \
     libzbar-dev \
@@ -11,19 +11,18 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Set work directory
+# Set work directory in the container
 WORKDIR /app
 
-# Install dependencies
+# Copy and install dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy app code
+# Copy app code into the container
 COPY . .
 
-# Collect static, run migrations
-RUN python manage.py collectstatic --noinput && \
-    python manage.py migrate
+# Collect static files and run migrations
+RUN python manage.py collectstatic --noinput && python manage.py migrate
 
-# Run the app
+# Run the app using Gunicorn
 CMD ["gunicorn", "EventsHub.wsgi:application", "--bind", "0.0.0.0:8000"]
