@@ -1,11 +1,11 @@
 app = "event-hub-yorlsg"
 
 [build]
-  dockerfile = "Dockerfile"
+  dockerfile = "DockerFile"
 
 [env]
   FLY_REGION = "sin"
-  SECRET_KEY = "your-django-secret-key"  # Set this to a secure key in production
+  SECRET_KEY = django-insecure-!albcnc1@u-)emu&6xgtsoi12xl97u93kuc+7-wu5txubd1b*^  # Set this to a secure key in production
 
 [[mounts]]
   source = "data"
