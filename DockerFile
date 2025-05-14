@@ -1,40 +1,29 @@
-# Use official Python slim base
+# Base image with Python
 FROM python:3.11-slim
 
-# Install system dependencies for pyzbar and Pillow
+# Install zbar and build tools
 RUN apt-get update && apt-get install -y \
-    build-essential \
     libzbar0 \
-    libjpeg-dev \
+    libzbar-dev \
+    build-essential \
+    gcc \
     zlib1g-dev \
-    libmagic1 \
+    libjpeg-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# Set work directory
 WORKDIR /app
 
-# Copy and install dependencies
+# Install dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy project code
+# Copy app code
 COPY . .
 
-# Collect static files (noinput)
-RUN python manage.py collectstatic --noinput
+# Collect static, run migrations
+RUN python manage.py collectstatic --noinput && \
+    python manage.py migrate
 
-# Run migrations
-RUN python manage.py migrate
-
-# OPTIONAL: Create superuser via environment variables
-# You can skip if you don’t want to auto-create superuser
-# RUN python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='admin').exists() or User.objects.create_superuser('admin', 'admin@example.com', 'adminpass123')"
-
-# Set environment
-ENV PYTHONUNBUFFERED=1
-
-# Expose port
-EXPOSE 8000
-
-# Start Gunicorn server
-CMD gunicorn EventsHub.wsgi:application --bind 0.0.0.0:8000
+# Run the app
+CMD ["gunicorn", "EventsHub.wsgi:application", "--bind", "0.0.0.0:8000"]
