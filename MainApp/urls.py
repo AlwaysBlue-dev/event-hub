@@ -36,8 +36,5 @@ urlpatterns = [
     path('events/<int:event_id>/export_attendees/', views.export_event_attendees_report, name='export_event_attendees_report'),
 
 ]
-# Serve media files even when DEBUG=False (e.g., on Railway)
-if settings.DEBUG or os.environ.get("RAILWAY_ENVIRONMENT") or os.environ.get("RAILWAY_STATIC_MEDIA_DEV"):
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    
+# Serve static and media files in development    
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
