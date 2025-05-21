@@ -39,3 +39,5 @@ urlpatterns = [
 # Serve media files even when DEBUG=False (e.g., on Railway)
 if settings.DEBUG or os.environ.get("RAILWAY_ENVIRONMENT") or os.environ.get("RAILWAY_STATIC_MEDIA_DEV"):
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
