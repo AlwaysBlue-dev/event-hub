@@ -1,0 +1,304 @@
+.event-edit-container {
+    --primary-color: #ff2e63;
+    --secondary-color: #00ffcc;
+    --dark-color: #1a1a2e;
+    --text-color: #b0b0cc;
+    --white: #ffffff;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --neon-glow: 0 0 12px #ff2e63, 0 0 24px #ff2e63, 0 0 36px #ff2e63;
+  
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color);
+    background: linear-gradient(180deg, #0a0a1a, var(--dark-color));
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .event-edit-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://grainy-gradients.vercel.app/noise.svg');
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  .event-edit-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 46, 99, 0.2), transparent 70%);
+    opacity: 0.3;
+    z-index: -1;
+  }
+  
+  .event-edit-container .container {
+    max-width: 900px;
+  }
+  
+  .event-edit-container .neon-heading {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    color: var(--white);
+    text-shadow: var(--neon-glow);
+    margin-bottom: 3rem;
+  
+  }
+  
+  .event-edit-container .neon-form {
+    margin-top: 2rem;
+  }
+  
+  .event-edit-container .neon-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    transition: var(--transition);
+  }
+  
+  .event-edit-container .neon-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 20px var(--primary-color);
+  }
+  
+  .event-edit-container .card-body {
+    padding: 2rem;
+  }
+  
+  .event-edit-container .neon-label {
+    font-size: 1rem;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+  }
+  
+  .event-edit-container .neon-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--secondary-color);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    width: 100%;
+    transition: var(--transition);
+    font-size: 1rem;
+  }
+  
+  .event-edit-container .neon-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 12px var(--primary-color);
+    outline: none;
+    transform: scale(1.02);
+  }
+  
+  .event-edit-container .neon-input::placeholder {
+    color: var(--text-color);
+    opacity: 0.8;
+  }
+  
+  .event-edit-container .neon-input[type="file"] {
+    padding: 0.5rem;
+  }
+  
+  .event-edit-container .neon-input::file-selector-button {
+    background: var(--secondary-color);
+    color: var(--dark-color);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .event-edit-container .neon-input::file-selector-button:hover {
+    background: var(--primary-color);
+  }
+  
+  .event-edit-container .input-group {
+    position: relative;
+  }
+  
+  .event-edit-container .input-icon {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    transition: var(--transition);
+  }
+  
+  .event-edit-container .neon-input:focus + .input-icon {
+    color: var(--primary-color);
+    text-shadow: 0 0 12px var(--primary-color);
+  }
+  
+  .event-edit-container .image-preview {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .event-edit-container .neon-image {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border: 2px solid var(--secondary-color);
+    border-radius: 12px;
+    transition: var(--transition);
+  }
+  
+  .event-edit-container .neon-image.rounded-circle {
+    width: 96px;
+    height: 96px;
+  }
+  
+  .event-edit-container .neon-image:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 12px var(--primary-color);
+    transform: scale(1.05);
+  }
+  
+  .event-edit-container .neon-checkbox {
+    color: var(--text-color);
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .event-edit-container .neon-checkbox input {
+    accent-color: var(--secondary-color);
+  }
+  
+  .event-edit-container .neon-button {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    color: var(--dark-color);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .event-edit-container .neon-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px var(--primary-color);
+  }
+  
+  .event-edit-container .neon-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+  }
+  
+  .event-edit-container .neon-button:active::after {
+    width: 200%;
+    height: 200%;
+  }
+  
+  .event-edit-container .neon-add {
+    background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+    animation: pulseButton 2s infinite;
+  }
+  
+  .event-edit-container .neon-submit {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+  }
+  
+  @keyframes pulseButton {
+    0% { box-shadow: 0 0 5px var(--secondary-color); }
+    50% { box-shadow: 0 0 15px var(--secondary-color); }
+    100% { box-shadow: 0 0 5px var(--secondary-color); }
+  }
+  
+  @media (max-width: 767px) {
+    .event-edit-container {
+      padding: 2rem 0;
+    }
+  
+    .event-edit-container .container {
+      padding: 0 1rem;
+    }
+  
+    .event-edit-container .neon-heading {
+      font-size: 2rem;
+    }
+  
+    .event-edit-container .card-body {
+      padding: 1.5rem;
+    }
+  
+    .event-edit-container .neon-input,
+    .event-edit-container .neon-label {
+      font-size: 0.95rem;
+    }
+  
+    .event-edit-container .neon-image {
+      width: 120px;
+      height: 120px;
+    }
+  
+    .event-edit-container .neon-image.rounded-circle {
+      width: 80px;
+      height: 80px;
+    }
+  
+    .event-edit-container .neon-button {
+      padding: 0.65rem 1rem;
+    }
+  }
+  
+  @media (max-width: 575px) {
+    .event-edit-container .neon-heading {
+      font-size: 1.8rem;
+    }
+  
+    .event-edit-container .neon-input,
+    .event-edit-container .neon-label,
+    .event-edit-container .neon-checkbox {
+      font-size: 0.85rem;
+    }
+  
+    .event-edit-container .neon-image {
+      width: 100px;
+      height: 100px;
+    }
+  
+    .event-edit-container .neon-image.rounded-circle {
+      width: 64px;
+      height: 64px;
+    }
+  
+    .event-edit-container .neon-button {
+      font-size: 0.9rem;
+    }
+  
+    .event-edit-container .neon-submit {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+    }
+  }

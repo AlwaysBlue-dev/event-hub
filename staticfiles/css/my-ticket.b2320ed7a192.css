@@ -1,0 +1,320 @@
+/* CSS specific to the My Orders page */
+:root {
+    --primary-color: #ff2e63; /* Neon Pink */
+    --secondary-color: #00ffcc; /* Neon Cyan */
+    --dark-color: #1a1a2e; /* Dark Navy */
+    --text-color: #b0b0cc; /* Light Gray */
+    --white: #ffffff;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    --transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --neon-glow: 0 0 10px #ff2e63, 0 0 20px #ff2e63, 0 0 30px #ff2e63;
+  }
+  
+  /* Scoped to .orders-container */
+  .orders-container {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color);
+    position: relative;
+  }
+  
+  .orders-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://grainy-gradients.vercel.app/noise.svg');
+    opacity: 0.05;
+    pointer-events: none;
+  }
+  
+  /* Sidebar */
+  .orders-container .neon-sidebar {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 2rem;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    box-shadow: var(--shadow);
+  }
+  
+  /* Page Title */
+  .orders-container .page-title.neon-glitch {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    color: var(--white);
+    text-shadow: var(--neon-glow);
+    margin-bottom: 2rem;
+  }
+  
+  /* Filter Bar */
+  .orders-container .filter-bar.glass-section {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .orders-container .form-label {
+    color: var(--white);
+    font-weight: 500;
+  }
+  
+  .orders-container select.neon-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--white);
+    border-radius: 8px;
+    padding: 0.5rem;
+    width: 200px;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%2300ffcc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.5rem;
+  }
+  
+  .orders-container select.neon-input option {
+    background: var(--dark-color);
+    color: var(--white);
+  }
+  
+  .orders-container select.neon-input:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 10px var(--secondary-color);
+  }
+  
+  /* Order Card */
+  .orders-container .order-card.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: var(--transition);
+    /* transform: rotate({% cycle '-2deg' '2deg' '0deg' '-1deg' %}); */
+  }
+  
+  .orders-container .order-card.glass-card:hover {
+    transform: rotate(0deg) scale(1.05);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 20px var(--secondary-color);
+  }
+  
+  .orders-container .order-image {
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 2px solid var(--secondary-color);
+  }
+  
+  .orders-container .card-body {
+    padding: 1.5rem;
+  }
+  
+  .orders-container .card-title {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--white);
+    font-size: 1.4rem;
+  }
+  
+  .orders-container .neon-badge {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    animation: badgePulse 2s infinite;
+  }
+  
+  @keyframes badgePulse {
+    0% { box-shadow: 0 0 5px var(--secondary-color); }
+    50% { box-shadow: 0 0 15px var(--secondary-color); }
+    100% { box-shadow: 0 0 5px var(--secondary-color); }
+  }
+  
+  .orders-container .bg-success {
+    background: linear-gradient(45deg, #00cc99, var(--secondary-color));
+  }
+  
+  .orders-container .bg-warning {
+    background: linear-gradient(45deg, #ffcc00, #ff9966);
+  }
+  
+  .orders-container .small-text {
+    font-size: 0.9rem;
+    color: var(--text-color);
+  }
+  
+  .orders-container .small-text strong {
+    color: var(--white);
+  }
+  
+  .orders-container .copy-btn {
+    background: transparent;
+    border: none;
+    color: var(--secondary-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+  }
+  
+  .orders-container .copy-btn:hover {
+    background: var(--secondary-color);
+    color: var(--dark-color);
+    box-shadow: 0 0 10px var(--secondary-color);
+  }
+  
+  .orders-container .neon-text {
+    color: var(--secondary-color);
+    text-shadow: 0 0 5px var(--secondary-color);
+  }
+  
+  .orders-container .neon-link {
+    color: var(--secondary-color);
+    text-decoration: underline;
+    transition: var(--transition);
+  }
+  
+  .orders-container .neon-link:hover {
+    color: var(--white);
+    text-shadow: 0 0 10px var(--primary-color);
+  }
+  
+  /* QR Section */
+  .orders-container .qr-section .neon-subtitle {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--secondary-color);
+    text-shadow: 0 0 5px var(--secondary-color);
+  }
+  
+  .orders-container .qr-image.neon-qr {
+    max-width: 150px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 8px;
+    box-shadow: 0 0 15px var(--secondary-color);
+    transition: var(--transition);
+  }
+  
+  .orders-container .qr-link:hover .neon-qr {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px var(--secondary-color);
+  }
+  
+  /* Buttons */
+  .orders-container .neon-button {
+    background: linear-gradient(45deg, #ff2e63, #00ffcc);
+    color: var(--white);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    box-shadow: var(--neon-glow);
+    transition: var(--transition);
+  }
+  
+  .orders-container .neon-button.pulse {
+    animation: buttonPulse 1.5s infinite;
+  }
+  
+  @keyframes buttonPulse {
+    0% { transform: scale(1); box-shadow: var(--neon-glow); }
+    50% { transform: scale(1.05); box-shadow: 0 0 20px #ff2e63, 0 0 30px #00ffcc; }
+    100% { transform: scale(1); box-shadow: var(--neon-glow); }
+  }
+  
+  .orders-container .neon-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  .orders-container .btn-outline-secondary {
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+  }
+  
+  .orders-container .btn-outline-secondary:hover {
+    background: var(--secondary-color);
+    color: var(--white);
+  }
+  
+  /* Pagination */
+  .orders-container .neon-pagination .neon-page-link {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--secondary-color);
+    color: var(--white);
+    margin: 0 0.2rem;
+    border-radius: 8px;
+    transition: var(--transition);
+  }
+  
+  .orders-container .neon-pagination .page-item.active .neon-page-link {
+    background: linear-gradient(45deg, #ff2e63, #00ffcc);
+    border-color: var(--secondary-color);
+    color: var(--white);
+  }
+  
+  .orders-container .neon-pagination .neon-page-link:hover {
+    background: var(--secondary-color);
+    color: var(--dark-color);
+    box-shadow: 0 0 10px var(--secondary-color);
+  }
+  
+  /* Alert */
+  .orders-container .neon-alert.glass-section {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--secondary-color);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--neon-glow);
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .orders-container .neon-sidebar {
+      position: static;
+      height: auto;
+      margin-bottom: 2rem;
+    }
+    .orders-container .page-title.neon-glitch {
+      font-size: 2rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .orders-container .order-image {
+      height: 150px;
+    }
+    .orders-container .qr-image.neon-qr {
+      max-width: 120px;
+    }
+    .orders-container .filter-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    .orders-container select.neon-input {
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .orders-container .page-title.neon-glitch {
+      font-size: 1.8rem;
+    }
+    .orders-container .card-title {
+      font-size: 1.2rem;
+    }
+    .orders-container .small-text {
+      font-size: 0.8rem;
+    }
+    .orders-container .order-card.glass-card {
+      transform: rotate(0deg);
+    }
+  }

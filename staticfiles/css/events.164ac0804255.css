@@ -1,0 +1,356 @@
+/* CSS specific to the Events page */
+:root {
+  --primary-color: #ff2e63; /* Neon Pink */
+  --secondary-color: #00ffcc; /* Neon Cyan */
+  --dark-color: #1a1a2e; /* Dark Navy */
+  --text-color: #b0b0cc; /* Light Gray */
+  --white: #ffffff;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --neon-glow: 0 0 10px #ff2e63, 0 0 20px #ff2e63, 0 0 30px #ff2e63;
+}
+
+/* Scoped to .events-section */
+.events-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.events-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://grainy-gradients.vercel.app/noise.svg');
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+.events-section .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.events-section h2.neon-glitch {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--white);
+  text-transform: uppercase;
+  text-shadow: var(--neon-glow);
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+/* Filter Form */
+.events-section .filter-form {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin-bottom: 3rem;
+  transition: var(--transition);
+}
+
+.events-section .filter-form:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.events-section .form-select,
+.events-section .search-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--white);
+  border-radius: 8px;
+  padding: 0.75rem;
+  transition: var(--transition);
+}
+
+.events-section .form-select:focus,
+.events-section .search-input:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 10px var(--secondary-color);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.events-section .form-select option {
+  background: var(--dark-color);
+  color: var(--white);
+}
+
+.events-section .search-input::placeholder {
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+/* Event Tabs */
+.events-section .nav-pills {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 0.5rem;
+  display: inline-flex;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+}
+
+.events-section .nav-link {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  color: var(--text-color);
+  transition: var(--transition);
+}
+
+.events-section .nav-link.active,
+.events-section .nav-link:hover {
+  background: linear-gradient(45deg, #ff2e63, #00ffcc);
+  color: var(--white);
+  text-shadow: 0 0 5px #ff2e63;
+  box-shadow: var(--neon-glow);
+}
+
+/* Event Cards */
+.events-section .event-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  overflow: visible;
+  transition: var(--transition);
+  position: relative;
+  /* transform: rotate({% cycle '-2deg' '2deg' '0deg' '-1deg' %}); */
+}
+
+.events-section .event-card:hover {
+  transform: translateY(-10px) rotate(0deg);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+}
+
+.events-section .neon-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  z-index: -1;
+  pointer-events: none;
+  transition: var(--transition);
+}
+
+.events-section .neon-card:hover::before {
+  border-color: #00ffcc;
+  box-shadow: 0 0 20px #00ffcc;
+}
+
+.events-section .card-img-top {
+  height: 200px;
+  object-fit: cover;
+  filter: saturate(1.2);
+  transition: var(--transition);
+}
+
+.events-section .event-card:hover .card-img-top {
+  transform: scale(1.1);
+}
+
+.events-section .card-body {
+  padding: 1.5rem;
+  color: var(--white);
+  position: relative;
+  z-index: 1;
+}
+
+.events-section .neon-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white);
+  text-shadow: 0 0 5px #ff2e63;
+  margin-bottom: 1rem;
+}
+
+.events-section .neon-subtitle {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.2rem;
+  color: var(--secondary-color);
+  text-shadow: 0 0 5px #00ffcc;
+  margin-bottom: 0.75rem;
+}
+
+.events-section .card-text {
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.events-section .event-faces {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.events-section .face-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border: 2px solid var(--secondary-color);
+  box-shadow: 0 0 8px #00ffcc;
+}
+
+.events-section .highlights li {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.events-section .badge {
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.events-section .neon-badge {
+  background: linear-gradient(45deg, #ff2e63, #00ffcc);
+  color: var(--white);
+  text-shadow: 0 0 5px #ff2e63;
+  box-shadow: var(--neon-glow);
+}
+
+.events-section .bg-success {
+  background: #00cc99 !important;
+}
+
+.events-section .bg-danger {
+  background: #ff3366 !important;
+}
+
+.events-section .neon-link {
+  color: var(--secondary-color);
+  text-shadow: 0 0 5px #00ffcc;
+  transition: var(--transition);
+}
+
+.events-section .neon-link:hover {
+  color: var(--white);
+  text-shadow: 0 0 10px #ff2e63;
+}
+
+.events-section .button-container {
+  position: relative;
+  z-index: 2;
+}
+
+.events-section .btn {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: var(--transition);
+  pointer-events: auto;
+}
+
+.events-section .neon-button {
+  background: linear-gradient(45deg, #ff2e63, #00ffcc);
+  color: var(--white);
+  border: none;
+  box-shadow: var(--neon-glow);
+  z-index: 2;
+}
+
+.events-section .neon-button.pulse {
+  animation: buttonPulse 1.5s infinite;
+}
+
+@keyframes buttonPulse {
+  0% { transform: scale(1); box-shadow: var(--neon-glow); }
+  50% { transform: scale(1.05); box-shadow: 0 0 20px #ff2e63, 0 0 30px #00ffcc; }
+  100% { transform: scale(1); box-shadow: var(--neon-glow); }
+}
+
+.events-section .neon-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.events-section .btn-outline-primary {
+  border-color: var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.events-section .btn-outline-primary:hover {
+  background: var(--secondary-color);
+  color: var(--white);
+}
+
+/* Pagination */
+.events-section .pagination {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.events-section .page-link {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  margin: 0 0.25rem;
+  transition: var(--transition);
+}
+
+.events-section .page-link:hover,
+.events-section .page-item.active .page-link {
+  background: linear-gradient(45deg, #ff2e63, #00ffcc);
+  color: var(--white);
+  box-shadow: var(--neon-glow);
+}
+
+/* Empty State */
+.events-section .neon-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  color: var(--white);
+  text-shadow: var(--neon-glow);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .events-section h2.neon-glitch {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .events-section {
+    padding: 4rem 0;
+  }
+  .events-section .filter-form {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .events-section h2.neon-glitch {
+    font-size: 2rem;
+  }
+  .events-section .nav-link {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+}

@@ -1,0 +1,330 @@
+body {
+    font-family: "Roboto", sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+} 
+main {
+    flex: 1;
+  }
+  .navbar {
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .navbar-brand {
+    font-weight: 700;
+    color: #007bff;
+  }
+  .nav-link {
+    font-weight: 400;
+    color: #333;
+  }
+  .nav-link:hover {
+    color: #007bff;
+  }
+  .footer-container {
+    --primary-color: #ff2e63;
+    --secondary-color: #00ffcc;
+    --dark-color: #1a1a2e;
+    --text-color: #b0b0cc;
+    --white: #ffffff;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --neon-glow: 0 0 12px #ff2e63, 0 0 24px #ff2e63, 0 0 36px #ff2e63;
+  
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color);
+    background: linear-gradient(180deg, #0a0a1a, var(--dark-color));
+    padding: 4rem 0 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .footer-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://grainy-gradients.vercel.app/noise.svg');
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  .footer-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 46, 99, 0.2), transparent 70%);
+    opacity: 0.3;
+    z-index: -1;
+  }
+  
+  .footer-container .container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    box-shadow: var(--shadow);
+    max-width: 1400px;
+    width: 100%;
+  }
+  
+  .footer-container .neon-heading {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    color: var(--white);
+    text-shadow: var(--neon-glow);
+    margin-bottom: 1rem;
+  }
+  
+  .footer-container .neon-subheading {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    color: var(--white);
+    text-shadow: 0 0 8px var(--secondary-color);
+    margin-bottom: 1.5rem;
+  }
+  
+  .footer-container .brand p {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+  }
+  
+  .footer-container .social-icons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .footer-container .neon-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--secondary-color);
+    border-radius: 50%;
+    color: var(--white);
+    font-size: 1.2rem;
+    transition: var(--transition);
+  }
+  
+  .footer-container .neon-icon:hover {
+    transform: scale(1.2);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 12px var(--primary-color);
+  }
+  
+  .footer-container .links ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-container .links li {
+    margin-bottom: 0.75rem;
+  }
+  
+  .footer-container .neon-link {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: var(--transition);
+  }
+  
+  .footer-container .neon-link:hover {
+    color: var(--primary-color);
+    text-shadow: 0 0 12px var(--primary-color);
+    transform: translateX(5px);
+  }
+  
+  .footer-container .contact p {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .footer-container .contact .neon-icon {
+    font-size: 1rem;
+    color: var(--secondary-color);
+    width: auto;
+    height: auto;
+    border: none;
+    background: none;
+  }
+  
+  .footer-container .contact .neon-icon:hover {
+    color: var(--primary-color);
+    text-shadow: 0 0 12px var(--primary-color);
+    transform: none;
+  }
+  
+  .footer-container .newsletter form {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .footer-container .neon-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--secondary-color);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    width: 100%;
+    transition: var(--transition);
+    font-size: 1rem;
+  }
+  
+  .footer-container .neon-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 12px var(--primary-color);
+    outline: none;
+  }
+  
+  .footer-container .neon-input::placeholder {
+    color: var(--text-color);
+    opacity: 0.8;
+    font-style: italic;
+  }
+  
+  .footer-container .neon-button {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    color: var(--dark-color);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .footer-container .neon-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px var(--primary-color);
+  }
+  
+  .footer-container .neon-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+  }
+  
+  .footer-container .neon-button:active::after {
+    width: 200%;
+    height: 200%;
+  }
+  
+  .footer-container .bottom {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .footer-container .bottom p {
+    font-size: 0.9rem;
+    color: var(--text-color);
+  }
+  
+  .footer-container .neon-heart {
+    color: var(--primary-color);
+    animation: heartPulse 1.5s infinite;
+  }
+  
+  @keyframes heartPulse {
+    0% { text-shadow: 0 0 5px var(--primary-color); }
+    50% { text-shadow: 0 0 15px var(--primary-color); }
+    100% { text-shadow: 0 0 5px var(--primary-color); }
+  }
+  
+  @media (max-width: 767px) {
+    .footer-container .container {
+      padding: 2rem;
+      max-width: 100%;
+    }
+  
+    .footer-container .neon-heading {
+      font-size: 1.8rem;
+    }
+  
+    .footer-container .neon-subheading {
+      font-size: 1.3rem;
+    }
+  
+    .footer-container .brand,
+    .footer-container .links,
+    .footer-container .contact,
+    .footer-container .newsletter {
+      margin-bottom: 2rem;
+    }
+  
+    .footer-container .social-icons {
+      justify-content: center;
+    }
+  
+    .footer-container .bottom {
+      margin-top: 2rem;
+    }
+  }
+  
+  @media (max-width: 575px) {
+    .footer-container {
+      padding: 2rem 0 1rem;
+    }
+  
+    .footer-container .container {
+      padding: 1.5rem;
+    }
+  
+    .footer-container .neon-heading {
+      font-size: 1.5rem;
+    }
+  
+    .footer-container .neon-subheading {
+      font-size: 1.2rem;
+    }
+  
+    .footer-container .brand p,
+    .footer-container .contact p,
+    .footer-container .links li,
+    .footer-container .bottom p {
+      font-size: 0.85rem;
+    }
+  
+    .footer-container .neon-input,
+    .footer-container .neon-button {
+      font-size: 0.9rem;
+      padding: 0.65rem;
+    }
+  
+    .footer-container .neon-icon {
+      width: 35px;
+      height: 35px;
+      font-size: 1rem;
+    }
+  }
