@@ -9,6 +9,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
+# Add this if not already present
+CSRF_TRUSTED_ORIGINS = [
+    "https://web-production-1077.up.railway.app",
+]
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 
