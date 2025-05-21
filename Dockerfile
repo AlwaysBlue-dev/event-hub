@@ -16,8 +16,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project files
 COPY . .
 
-# Collect static files (optional)
-RUN python manage.py collectstatic --noinput
 
 # Expose port (Railway uses 8000 by default)
 EXPOSE 8000
