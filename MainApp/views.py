@@ -25,7 +25,8 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.contrib.sites.shortcuts import get_current_site
 import json
-from pyzbar.pyzbar import decode
+import cv2
+import numpy as np
 from PIL import Image
 from datetime import timedelta
 from django.db.models.functions import TruncDate
@@ -1366,10 +1367,16 @@ def validate_qr(request):
     if request.method == 'POST':
         if request.FILES.get('qr_image'):
             # Uploaded QR Image
-            image = Image.open(request.FILES['qr_image'])
-            decoded_data = decode(image)
-            if decoded_data:
-                qr_data_str = decoded_data[0].data.decode('utf-8')
+            image = Image.open(request.FILES['qr_image']).convert('RGB')
+            # Convert PIL Image to OpenCV format
+            open_cv_image = np.array(image)
+            open_cv_image = open_cv_image[:, :, ::-1].copy()  # RGB to BGR
+
+            detector = cv2.QRCodeDetector()
+            data, bbox, straight_qrcode = detector.detectAndDecode(open_cv_image)
+
+            if data:
+                qr_data_str = data
             else:
                 return render(request, 'qr_validation_failed.html', {'error': 'No QR code detected'})
         else:
