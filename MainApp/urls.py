@@ -36,5 +36,7 @@ urlpatterns = [
     path('events/<int:event_id>/export_attendees/', views.export_event_attendees_report, name='export_event_attendees_report'),
 
 ]
-# Serve static and media files in development    
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
